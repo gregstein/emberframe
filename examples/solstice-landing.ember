@@ -1,0 +1,1660 @@
+{
+ "format": "emberframe",
+ "version": 1,
+ "document": {
+  "pages": [
+   {
+    "name": "Landing page",
+    "width": 1200,
+    "height": 800,
+    "canvas": {
+     "r": 16,
+     "g": 19,
+     "b": 43,
+     "a": 255
+    },
+    "layers": [
+     {
+      "name": "Background",
+      "visible": true,
+      "locked": false,
+      "shared": false,
+      "objects": [
+       {
+        "id": 1,
+        "name": "Glow violet",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 720,
+         "y": -220,
+         "w": 620,
+         "h": 620
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 0.35,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 2,
+        "name": "Glow ember",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 860,
+         "y": 300,
+         "w": 520,
+         "h": 520
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 0.3,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 3,
+        "name": "Glow teal",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": -180,
+         "y": 520,
+         "w": 420,
+         "h": 420
+        },
+        "points": [],
+        "fill": {
+         "r": 46,
+         "g": 211,
+         "b": 183,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 0.14,
+        "visible": true,
+        "locked": false
+       }
+      ]
+     },
+     {
+      "name": "Header",
+      "visible": true,
+      "locked": false,
+      "shared": false,
+      "objects": [
+       {
+        "id": 4,
+        "name": "Logo star",
+        "shape": {
+         "Auto": {
+          "kind": "Star",
+          "a": 0.45,
+          "b": 0.0,
+          "count": 5
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 30,
+         "w": 32,
+         "h": 32
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 5,
+        "name": "Brand",
+        "shape": {
+         "Text": {
+          "content": "Solstice",
+          "size": 22
+         }
+        },
+        "bounds": {
+         "x": 98,
+         "y": 30,
+         "w": 120,
+         "h": 30.799999999999997
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 6,
+        "name": "Nav Product",
+        "shape": {
+         "Text": {
+          "content": "Product",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 610,
+         "y": 35,
+         "w": 70,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 7,
+        "name": "Nav Pricing",
+        "shape": {
+         "Text": {
+          "content": "Pricing",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 700,
+         "y": 35,
+         "w": 70,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 8,
+        "name": "Nav Stories",
+        "shape": {
+         "Text": {
+          "content": "Stories",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 790,
+         "y": 35,
+         "w": 70,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 9,
+        "name": "Button",
+        "shape": {
+         "Rect": {
+          "radius": 21
+         }
+        },
+        "bounds": {
+         "x": 1000,
+         "y": 26,
+         "w": 144,
+         "h": 42
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 10,
+        "name": "Button label",
+        "shape": {
+         "Text": {
+          "content": "Get started",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 1030,
+         "y": 36,
+         "w": 100,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       }
+      ]
+     },
+     {
+      "name": "Hero",
+      "visible": true,
+      "locked": false,
+      "shared": false,
+      "objects": [
+       {
+        "id": 11,
+        "name": "Eyebrow",
+        "shape": {
+         "Text": {
+          "content": "BUDGETS THAT PLAN THEMSELVES",
+          "size": 14
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 146,
+         "w": 400,
+         "h": 19.599999999999998
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 181,
+         "b": 71,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 12,
+        "name": "Headline 1",
+        "shape": {
+         "Text": {
+          "content": "Your money,",
+          "size": 66
+         }
+        },
+        "bounds": {
+         "x": 54,
+         "y": 174,
+         "w": 560,
+         "h": 92.39999999999999
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 13,
+        "name": "Headline 2",
+        "shape": {
+         "Text": {
+          "content": "finally in focus.",
+          "size": 66
+         }
+        },
+        "bounds": {
+         "x": 54,
+         "y": 256,
+         "w": 620,
+         "h": 92.39999999999999
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 14,
+        "name": "Subhead 1",
+        "shape": {
+         "Text": {
+          "content": "See every account in one calm place, and let",
+          "size": 19
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 356,
+         "w": 520,
+         "h": 26.599999999999998
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 15,
+        "name": "Subhead 2",
+        "shape": {
+         "Text": {
+          "content": "Solstice move the rest to where it belongs.",
+          "size": 19
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 386,
+         "w": 520,
+         "h": 26.599999999999998
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 16,
+        "name": "CTA",
+        "shape": {
+         "Rect": {
+          "radius": 28
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 440,
+         "w": 196,
+         "h": 56
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 17,
+        "name": "CTA label",
+        "shape": {
+         "Text": {
+          "content": "Start for free",
+          "size": 18
+         }
+        },
+        "bounds": {
+         "x": 92,
+         "y": 455,
+         "w": 140,
+         "h": 25.2
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 18,
+        "name": "CTA arrow",
+        "shape": {
+         "Auto": {
+          "kind": "Arrow",
+          "a": 0.4,
+          "b": 0.5,
+          "count": 0
+         }
+        },
+        "bounds": {
+         "x": 212,
+         "y": 459,
+         "w": 24,
+         "h": 18
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 19,
+        "name": "CTA secondary",
+        "shape": {
+         "Rect": {
+          "radius": 28
+         }
+        },
+        "bounds": {
+         "x": 270,
+         "y": 440,
+         "w": 164,
+         "h": 56
+        },
+        "points": [],
+        "fill": {
+         "r": 16,
+         "g": 19,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": {
+         "color": {
+          "r": 154,
+          "g": 163,
+          "b": 199,
+          "a": 255
+         },
+         "width": 1.5
+        },
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 20,
+        "name": "CTA secondary label",
+        "shape": {
+         "Text": {
+          "content": "Watch demo",
+          "size": 18
+         }
+        },
+        "bounds": {
+         "x": 306,
+         "y": 455,
+         "w": 120,
+         "h": 25.2
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 21,
+        "name": "Phone body",
+        "shape": {
+         "Rect": {
+          "radius": 44
+         }
+        },
+        "bounds": {
+         "x": 760,
+         "y": 104,
+         "w": 310,
+         "h": 640
+        },
+        "points": [],
+        "fill": {
+         "r": 7,
+         "g": 9,
+         "b": 20,
+         "a": 255
+        },
+        "stroke": {
+         "color": {
+          "r": 57,
+          "g": 64,
+          "b": 111,
+          "a": 255
+         },
+         "width": 3
+        },
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 22,
+        "name": "Phone screen",
+        "shape": {
+         "Rect": {
+          "radius": 32
+         }
+        },
+        "bounds": {
+         "x": 774,
+         "y": 118,
+         "w": 282,
+         "h": 612
+        },
+        "points": [],
+        "fill": {
+         "r": 27,
+         "g": 32,
+         "b": 66,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 23,
+        "name": "Notch",
+        "shape": {
+         "Rect": {
+          "radius": 10
+         }
+        },
+        "bounds": {
+         "x": 870,
+         "y": 130,
+         "w": 90,
+         "h": 20
+        },
+        "points": [],
+        "fill": {
+         "r": 7,
+         "g": 9,
+         "b": 20,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 24,
+        "name": "Balance label",
+        "shape": {
+         "Text": {
+          "content": "Total balance",
+          "size": 14
+         }
+        },
+        "bounds": {
+         "x": 798,
+         "y": 170,
+         "w": 200,
+         "h": 19.599999999999998
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 25,
+        "name": "Balance",
+        "shape": {
+         "Text": {
+          "content": "$24,860",
+          "size": 44
+         }
+        },
+        "bounds": {
+         "x": 798,
+         "y": 192,
+         "w": 240,
+         "h": 61.599999999999994
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 26,
+        "name": "Bar 1",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 800,
+         "y": 340,
+         "w": 26,
+         "h": 60
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 27,
+        "name": "Bar 2",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 840,
+         "y": 300,
+         "w": 26,
+         "h": 100
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 28,
+        "name": "Bar 3",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 880,
+         "y": 320,
+         "w": 26,
+         "h": 80
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 29,
+        "name": "Bar 4",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 920,
+         "y": 270,
+         "w": 26,
+         "h": 130
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 30,
+        "name": "Bar 5",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 960,
+         "y": 290,
+         "w": 26,
+         "h": 110
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 31,
+        "name": "Bar 6",
+        "shape": {
+         "Rect": {
+          "radius": 6
+         }
+        },
+        "bounds": {
+         "x": 1000,
+         "y": 310,
+         "w": 26,
+         "h": 90
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 32,
+        "name": "Row Groceries",
+        "shape": {
+         "Rect": {
+          "radius": 14
+         }
+        },
+        "bounds": {
+         "x": 794,
+         "y": 430,
+         "w": 242,
+         "h": 58
+        },
+        "points": [],
+        "fill": {
+         "r": 37,
+         "g": 43,
+         "b": 85,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 33,
+        "name": "Dot Groceries",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 806,
+         "y": 443,
+         "w": 32,
+         "h": 32
+        },
+        "points": [],
+        "fill": {
+         "r": 46,
+         "g": 211,
+         "b": 183,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 34,
+        "name": "Name Groceries",
+        "shape": {
+         "Text": {
+          "content": "Groceries",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 850,
+         "y": 448,
+         "w": 100,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 35,
+        "name": "Amount Groceries",
+        "shape": {
+         "Text": {
+          "content": "-$82.40",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 958,
+         "y": 448,
+         "w": 80,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 36,
+        "name": "Row Salary",
+        "shape": {
+         "Rect": {
+          "radius": 14
+         }
+        },
+        "bounds": {
+         "x": 794,
+         "y": 500,
+         "w": 242,
+         "h": 58
+        },
+        "points": [],
+        "fill": {
+         "r": 37,
+         "g": 43,
+         "b": 85,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 37,
+        "name": "Dot Salary",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 806,
+         "y": 513,
+         "w": 32,
+         "h": 32
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 181,
+         "b": 71,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 38,
+        "name": "Name Salary",
+        "shape": {
+         "Text": {
+          "content": "Salary",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 850,
+         "y": 518,
+         "w": 100,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 39,
+        "name": "Amount Salary",
+        "shape": {
+         "Text": {
+          "content": "+$4,200",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 958,
+         "y": 518,
+         "w": 80,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 40,
+        "name": "Row Rent",
+        "shape": {
+         "Rect": {
+          "radius": 14
+         }
+        },
+        "bounds": {
+         "x": 794,
+         "y": 570,
+         "w": 242,
+         "h": 58
+        },
+        "points": [],
+        "fill": {
+         "r": 37,
+         "g": 43,
+         "b": 85,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 41,
+        "name": "Dot Rent",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 806,
+         "y": 583,
+         "w": 32,
+         "h": 32
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 106,
+         "b": 43,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 42,
+        "name": "Name Rent",
+        "shape": {
+         "Text": {
+          "content": "Rent",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 850,
+         "y": 588,
+         "w": 100,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 43,
+        "name": "Amount Rent",
+        "shape": {
+         "Text": {
+          "content": "-$1,150",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 958,
+         "y": 588,
+         "w": 80,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 44,
+        "name": "Row Coffee",
+        "shape": {
+         "Rect": {
+          "radius": 14
+         }
+        },
+        "bounds": {
+         "x": 794,
+         "y": 640,
+         "w": 242,
+         "h": 58
+        },
+        "points": [],
+        "fill": {
+         "r": 37,
+         "g": 43,
+         "b": 85,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 45,
+        "name": "Dot Coffee",
+        "shape": "Ellipse",
+        "bounds": {
+         "x": 806,
+         "y": 653,
+         "w": 32,
+         "h": 32
+        },
+        "points": [],
+        "fill": {
+         "r": 122,
+         "g": 92,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 46,
+        "name": "Name Coffee",
+        "shape": {
+         "Text": {
+          "content": "Coffee",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 850,
+         "y": 658,
+         "w": 100,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 47,
+        "name": "Amount Coffee",
+        "shape": {
+         "Text": {
+          "content": "-$4.80",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 958,
+         "y": 658,
+         "w": 80,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       }
+      ]
+     },
+     {
+      "name": "Feature cards",
+      "visible": true,
+      "locked": false,
+      "shared": false,
+      "objects": [
+       {
+        "id": 48,
+        "name": "Card Smart pots",
+        "shape": {
+         "Rect": {
+          "radius": 20
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 560,
+         "w": 310,
+         "h": 180
+        },
+        "points": [],
+        "fill": {
+         "r": 27,
+         "g": 32,
+         "b": 66,
+         "a": 255
+        },
+        "stroke": {
+         "color": {
+          "r": 43,
+          "g": 49,
+          "b": 96,
+          "a": 255
+         },
+         "width": 1.0
+        },
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 49,
+        "name": "Icon Smart pots",
+        "shape": {
+         "Auto": {
+          "kind": "Star",
+          "a": 0.45,
+          "b": 0.0,
+          "count": 5
+         }
+        },
+        "bounds": {
+         "x": 80,
+         "y": 584,
+         "w": 40,
+         "h": 40
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 181,
+         "b": 71,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 50,
+        "name": "Title Smart pots",
+        "shape": {
+         "Text": {
+          "content": "Smart pots",
+          "size": 22
+         }
+        },
+        "bounds": {
+         "x": 80,
+         "y": 640,
+         "w": 260,
+         "h": 30.799999999999997
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 51,
+        "name": "Body 1 Smart pots",
+        "shape": {
+         "Text": {
+          "content": "Money sorts itself",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 80,
+         "y": 678,
+         "w": 260,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 52,
+        "name": "Body 2 Smart pots",
+        "shape": {
+         "Text": {
+          "content": "on payday.",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 80,
+         "y": 702,
+         "w": 260,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 53,
+        "name": "Card Live insights",
+        "shape": {
+         "Rect": {
+          "radius": 20
+         }
+        },
+        "bounds": {
+         "x": 386,
+         "y": 560,
+         "w": 310,
+         "h": 180
+        },
+        "points": [],
+        "fill": {
+         "r": 27,
+         "g": 32,
+         "b": 66,
+         "a": 255
+        },
+        "stroke": {
+         "color": {
+          "r": 43,
+          "g": 49,
+          "b": 96,
+          "a": 255
+         },
+         "width": 1.0
+        },
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 54,
+        "name": "Icon Live insights",
+        "shape": {
+         "Auto": {
+          "kind": "Doughnut",
+          "a": 0.5,
+          "b": 0.0,
+          "count": 0
+         }
+        },
+        "bounds": {
+         "x": 410,
+         "y": 584,
+         "w": 40,
+         "h": 40
+        },
+        "points": [],
+        "fill": {
+         "r": 46,
+         "g": 211,
+         "b": 183,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 55,
+        "name": "Title Live insights",
+        "shape": {
+         "Text": {
+          "content": "Live insights",
+          "size": 22
+         }
+        },
+        "bounds": {
+         "x": 410,
+         "y": 640,
+         "w": 260,
+         "h": 30.799999999999997
+        },
+        "points": [],
+        "fill": {
+         "r": 255,
+         "g": 255,
+         "b": 255,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 56,
+        "name": "Body 1 Live insights",
+        "shape": {
+         "Text": {
+          "content": "Know where it went",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 410,
+         "y": 678,
+         "w": 260,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 57,
+        "name": "Body 2 Live insights",
+        "shape": {
+         "Text": {
+          "content": "before it is gone.",
+          "size": 15
+         }
+        },
+        "bounds": {
+         "x": 410,
+         "y": 702,
+         "w": 260,
+         "h": 21.0
+        },
+        "points": [],
+        "fill": {
+         "r": 154,
+         "g": 163,
+         "b": 199,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 1.0,
+        "visible": true,
+        "locked": false
+       }
+      ]
+     },
+     {
+      "name": "Hotspots",
+      "visible": true,
+      "locked": false,
+      "shared": false,
+      "objects": [
+       {
+        "id": 58,
+        "name": "Hotspot CTA",
+        "shape": {
+         "Web": {
+          "kind": "Hotspot",
+          "url": "https://example.com/signup"
+         }
+        },
+        "bounds": {
+         "x": 56,
+         "y": 440,
+         "w": 196,
+         "h": 56
+        },
+        "points": [],
+        "fill": {
+         "r": 0,
+         "g": 160,
+         "b": 80,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 0.45,
+        "visible": true,
+        "locked": false
+       },
+       {
+        "id": 59,
+        "name": "Slice Phone",
+        "shape": {
+         "Web": {
+          "kind": "Slice",
+          "url": ""
+         }
+        },
+        "bounds": {
+         "x": 760,
+         "y": 104,
+         "w": 310,
+         "h": 640
+        },
+        "points": [],
+        "fill": {
+         "r": 0,
+         "g": 160,
+         "b": 80,
+         "a": 255
+        },
+        "stroke": null,
+        "opacity": 0.45,
+        "visible": true,
+        "locked": false
+       }
+      ]
+     }
+    ],
+    "active_layer": 2,
+    "states": [
+     {
+      "name": "State 1",
+      "delay_ms": 500,
+      "exported": true,
+      "objects": []
+     }
+    ],
+    "active_state": 0,
+    "export": {
+     "format": "Png8",
+     "quality": 80,
+     "colors": 128,
+     "transparent": false,
+     "matte": null
+    }
+   }
+  ],
+  "active_page": 0,
+  "next_id": 60
+ }
+}
