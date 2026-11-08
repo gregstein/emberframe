@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.svg" width="96" height="96" alt="Emberframe logo">
+  <img src="docs/ef-logo.png" width="96" height="96" alt="Emberframe logo">
 </p>
 
 <h1 align="center">Emberframe</h1>
