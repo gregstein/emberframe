@@ -1,0 +1,38 @@
+Building the package
+====================
+
+The packaging is on the branch "pisiworks", beside the code:
+
+    gbp buildpackage
+
+debian/gbp.conf makes the upstream tarball from that branch.
+
+Rust
+----
+The programs need Rust 1.91 or newer (Cargo.toml: rust-version), because of
+the interface library they are built on, GPUI. Debian 13 and Pardus 25 have
+Rust 1.85, with which they do not build.
+
+Building with no network
+------------------------
+The programs are built from some 700 Rust libraries (crates), which cargo
+otherwise fetches from crates.io. debian/rules builds from the folder
+cargo-vendor/ in the source tree when it is there, and then needs no network.
+
+    packaging/vendor-tarball.sh
+
+makes that folder and packs it as
+target/deb/pisiworks_VERSION.orig-cargo-vendor.tar.xz (about 90 MB), the form
+of an additional upstream tarball of a "3.0 (quilt)" source package. To build:
+
+    cp pisiworks_VERSION.orig-cargo-vendor.tar.xz ..
+    tar -xf ../pisiworks_VERSION.orig-cargo-vendor.tar.xz
+    gbp buildpackage
+
+cargo-vendor/ is not kept in git (.gitignore). gbp cannot make this tarball
+itself (--git-component wants the folder in git), so it is unpacked by hand.
+
+The files of the package are laid out by packaging/install-files.sh, which
+packaging/build-deb.sh uses too: the two ways give the same package.
+
+ -- Murat SAPMAZ

@@ -1,0 +1,7 @@
+pisiworks (0.2.0-1) unstable; urgency=medium
+
+  * First source package: built with git-buildpackage from the upstream tag.
+  * About shows the shared site, the developer's site and the repository,
+    with a button that opens each.
+
+ -- Murat SAPMAZ <muratspmz@gmail.com>  Tue, 17 Nov 2026 13:54:27 +0300

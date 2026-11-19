@@ -1,0 +1,89 @@
+PisiWorks and PisiAnimasyon
+Copyright (C) 2026 Murat SAPMAZ  <https://muratsapmaz.web.app/>
+
+PisiWorks and PisiAnimasyon are free software: you can redistribute them and/or
+modify them under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+They are distributed in the hope that they will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+The GNU General Public License is in the file COPYING. If it is missing, see
+<https://www.gnu.org/licenses/>.
+
+
+Emberframe
+----------
+
+PisiWorks is built on Emberframe 0.1, Copyright (c) 2026 Med Amine Belbachir
+<https://medamineweb.com>, <https://github.com/gregstein/emberframe>, which its
+author published under the MIT license. That license, with his copyright
+notice, is in LICENSES/MIT.txt, and what came from Emberframe stays under it.
+The source files that hold code of his say so at their top.
+
+The versions of PisiWorks published before 16 November 2026 were published
+under the MIT license as well, and remain so. From that day on the work as a
+whole, and everything Murat SAPMAZ has written in it, is under the GNU General
+Public License, version 3 or later.
+
+
+Additional terms: the author's name, the origin, and the programs' names
+-------------------------------------------------------------------------
+
+Additional terms under GNU GPL version 3 section 7, paragraphs (b), (c) and
+(e). They apply to everything in the programs of which Murat SAPMAZ holds the
+copyright, and to every work that contains it.
+
+(b) Attribution. The legal notices a work containing this material shows to
+    its users (in these programs, Help > About) must keep, where they can be
+    read, the line that names Murat SAPMAZ as the developer, the address of
+    his site, the address of the source, and the thanks to the author of
+    Emberframe. Lines may be added to them; these may not be taken out,
+    hidden or made unreadable. The copyright and license notices at the top
+    of the source files, and this file, must be kept as well.
+
+(c) Origin. The origin of this material must not be misrepresented: no one
+    may claim to have written the original programs. A modified version must
+    say plainly that it is a modified version, who changed it and when, in
+    its About window and wherever it is offered to others, and must not be
+    passed off as the original. It must go under a name of its own, that
+    cannot be taken for PisiWorks or PisiAnimasyon.
+
+(e) Names and marks. No right is granted under trademark law to use the names
+    "PisiWorks" and "PisiAnimasyon", or the programs' icons and marks, for a
+    modified version or for another product. They may be used to say
+    truthfully where a work comes from, as in "based on PisiAnimasyon".
+
+Copies that are not modified may be passed on under the programs' own names.
+Building the source for a system, packaging it for a distribution, and the
+changes that only that needs, do not make a modified version in this sense.
+
+These terms take nothing from the freedoms of the GNU General Public License:
+anyone may still use, study, change and pass on the programs. They ask that
+what is changed be called something else, and that who wrote the original be
+said.
+
+
+What you make with the programs is yours
+----------------------------------------
+
+Additional permission under GNU GPL version 3 section 7:
+
+When PisiAnimasyon publishes a film, or PisiWorks exports a page, it writes
+into the HTML file a script of its own that plays the film or makes the page
+work. You may convey such a file, with that script in it as the program wrote
+it, under terms of your choice. The film or the page is your work, and it is
+not made subject to the GNU General Public License by holding that script.
+
+This permission does not reach the programs themselves, nor a script that has
+been changed: those remain under the GNU General Public License.
+
+
+Libraries
+---------
+
+The libraries compiled into the programs are listed, each with its license, in
+docs/THIRD-PARTY.md. vendor/xim-ctext is a patched copy of a library by Riey,
+under the MIT license; its own files say so.

@@ -1,0 +1,805 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PisiAnimasyon">
+<title>Adsız.sahne</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #222; }
+  body { display: flex; align-items: center; justify-content: center; }
+  canvas { max-width: 100%; max-height: 100%; background: #fff; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="560" height="300"></canvas>
+<script>
+// Made with PisiAnimasyon. The film is its maker's own work. The script below is PisiAnimasyon's,
+// and may be passed on with this film under any terms (https://github.com/MuratSAPMAZ/PisiWorks, NOTICE).
+// pictures: every picture of the animation, each stored once.
+// sets: the pictures of each movie clip (one for each of its frames) and of each button (up, over, down).
+// scenes: for each scene its frames; a frame has what to draw (o), an action (a) and a sound (s).
+// What is drawn is a picture of the stage ("i"), a movie clip ("c"), a button ("b") or an object
+// with behaviors ("m"); the last three may carry behaviors: the point to turn around (p), the
+// object's box (box), the list (l) of [kind, first number, second number], the object's name (n),
+// whether it is round (r), and the name of the object it is attached to (a), if it is.
+// A text that shows a number ("t") is written here, with the number in place of its {name}.
+// rules: what makes the film a game. Each has an event (e): [kind, first name, second name, number]
+// what must also be so (c): a list of [number, how, value], or nothing; steps (s): [kind, name, first number,
+// second number, second name]; and steps to take otherwise (o). A value or a number may be a sum, written
+// as text: "Score * 2", "Hero.x + 10", "random(1, 6)". A step that holds steps ("repeat", "if", "while")
+// carries them after its own five parts: its body, its conditions, and what to do otherwise.
+// commands: steps (s) under a name, with the names of the values they take (p), done by the step "call",
+// which carries the values after its five parts. numbers: the numbers by name, as they start.
+// defaults: the two numbers each behavior starts with, for the rules that give an object a behavior.
+var movie = {
+  width: 560, height: 300, fps: 24, background: "rgba(255,255,255,1)",
+  pictures: ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAEsCAYAAADdDYkSAABAtklEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1U+//pSVueqqq6666qqrrvrfA/36U1bmqquuuuqqq6666n8P9BtPWZmrrrrqqquuuuqq/z3QbzxlZa666qqrrrrqqqv+90C/8dSVueqqq6666qqrrvrfA/3GU1fmqquuuuqqq6666n8P9BtPXZmrrrrqqquuuuqq/z3Qbz51Za666qqrrrrqqqv+90C/+dSVueqqq6666qqrrvrfA/3mU1fmqquuuuqqq6666n8P9JtPXZmrrrrqqquuuuqq/z3Qbz11Za666qqrrrrqqqv+90C/9dSVueqqq6666qqrrvrfA/3W01bmqquuuuqqq6666n8P9FtPW5mrrrrqqquuuuqq/z3Qbz1tZa666qqrrrrqqqv+90C//bSVueqqq6666qqrrvrfA/3201bmqquuuuqqq6666n8P9NtPW5mrrrrqqquuuuqq/z3Qbz9tZa666qqrrrrqqqv+90C/87SVueqqq6666qqrrvrfA/3O09fmqquuuuqqq6666n8P9DtPX5urrrrqqquuuuqq/z3Q7zx9ba666qqrrrrqqqv+90C/8/S1ueqqq6666qqrrvrfA/3u09fmqquuuuqqq6666n8P9LtPX5urrrrqqquuuuqq/z3Q7z59ba666qqrrrrqqqv+90C/+/S1ueqqq6666qqrrvrfA/3e09fmqquuuuqqq6666n8P9Hu3rs1VV1111VVXXXXV/x7o925dm6uuuuqqq6666qr/PdDv3bo2V1111VVXXXXVVf97oN+7dW2uuuqqq6666qqr/vdAv3/r2lx11VVXXXXVVVf974F+/9a1ueqqq6666qqrrvrfA/3+rWtz1VVXXXXVVVdd9b8H+v1b1+aqq6666qqrrrrqfw/0B7euzVVXXXXVVVddddX/HugPnrE2V1111VVXXXXVVf97oD94xtpcddVVV1111VVX/e+B/uAZa3PVVVddddVVV131vwf6g2eszVVXXXXVVVddddX/HugPn7E2V1111VVXXXXVVf97oD98xtpc9R/mKU94PNffdBObW9v8Z3vqE5/INddfz/bODv9RnvrEJ3LtDdeztb3DVf8zXTh/jsO9fW5+yEP4n+of/vqveNSLvTi16/jfaL1a8cR/+Dv6fsajXvwlkMT/VI//27/hYY96NP1sxn+1J/793/Gghz2c+WLBc7vv7rtpbeL6m27mf4PH/93f8rBHPop+NuOB7r37LrIl1990E1f9j4L+8Blrc9WL7Pd+/Vf5vV//NS5euMCJU6d4rTd4I17tdV+P+33yh3wg7/khH8ZjX/KleGGGYaDve/49Pv0jP4y3f4/34qVf4RX5j/LpH/lhvON7vQ8v+XIvz7/GNE1EBBHBf7e//tM/4fF//7e8+du9I1/3RZ/Pp37xl/HCZCaf8ZEfxud97dfzrV/1FbzxW78tD37YwwGwTZsmatdxv2c89Sn8wk/+OB/ycZ/Ip3/Uh/F5X/MNRAT/Gn/+R3/Ak/7hH3jX9/9A7nffPXfz/d/yzXzEp346XdfxgvzmL/4Cf/eXf8FHffpn8j/Vu7/pG/L13//DHD95khdmGAb6vuc/yu1Pfzrf801fzyd87hcwm8/5txjHkU/8wPfj+ptu4sy11/E+H/6R/Gf7lA/9ID70Ez+Zmx/8EB7oW7/qK3j0i78Er/kGb8gL8v5v91Z8wdd9I9fecCP/EX7lZ34KSbzhW74193v83/4Nf/jbv8X7feRH80Af9m7vxCd+3hfyoIc+jOf249/3PRzs7/PeH/rh/Gf5oe/4Nh7zki9Fmyae/uQn8fbv+d68ME970hP5tZ//Wd7/oz6Wz/roj+DzvvYbkATAB7z9W/P5X/eNXHv9DTzQj33Pd7E8OuI9P+TD+Lf4mR/+QcZh4O3f87256j8U+sNnrM1VL5If/PZv5Y9/97d5zw/+MG685Rbuuv12vvebv5FXf73X5x3e870B+OQP+UDe80M+jMe+5EvxgmQmn/GRH8YXfP038e/x6R/5Ybz9e7wXL/0Kr8h/lE//yA/jHd/rfXjJl3t5/jW+5Su/nDd6y7fiwQ9/BP/dlkdHHOzvc/qaa7jztmdw04MezL/k9qc/nZsf8hDuufMOTl1zLV3XAfCXf/LHPPUJj+cd3ut9uN80jpy9916uv+kmbr/16dz84Ifwr7U8OuIj3/Pd+JQv/GIe+shHAfANX/KFnL7mWt7pfd6PF+Y3f/EX+Lu//As+6tM/k/+p3v1N35Cv//4f5vjJk7wwn/phH8wXfP03IYn/CN/19V/Ln/7+7/HO7/v+vNYbvhH/Fk9+3OP4ys/9LL7ph3+M/ypPetw/8NBHPJLadTzQHc+4lZ1jx9k5fpwX5P3f7q34gq/7Rq694Ub+I9x9xx182od/MF/93d/PzvHj2OZTP+yDefO3fwde7XVfnwf6sHd7Jz7x876QBz30YTy3H/++7+Fgf5/3/tAP5z/L2XvvZWt7G9ssDw85dc01vDDjMHD+7Fmuu/FGbr/16dz84Idwvw94+7fm87/uG7n2+ht4oB/7nu9ieXTEe37Ih/Fvce7ee8lMrrn+eq76D4X+6La1uepftL+3xwe+/dvwFd/xXdxw8y3c767bb+fj3/99+Paf/Bk2Njf55A/+QN7zQz6Mx77US3H23nv55Z/+Sd7hPd+b+WIBwDiOfP+3fBO/9cu/zGu/0Rtxw8238EZv9dZ819d/Le/+QR9C3/cA/N6v/xonT5/mxV76ZTh/9iy/+JM/ztl77uHEqVO83pu9Bbc85CF8+kd8GG//Hu/FS7/iK7J78QK/9Uu/yO233srm1hZv/NZvw423PAiAH/7O7+BN3+7t+cWf+HHAvPP7vj/f+fVfy7t9wAcxm814oE//iA/jHd/7fXjJl3t5zp89yy/+xI/zdu/xnjz9yU/i/NmzvOYbvCEA4zjyfd/8jbzPh38kf/jbv8W3ffVX8tIv/wrsHD/Oe3zwh/A7v/IrPOhhD+MRj3ksALc//en87V/+Ba/7Jm/CD3/nd/IeH/TB1K4D4GlPehJ//9d/yWu9wRvxCz/xY7zr+38g9/uFn/gxXvLlXp6bH/wQ7vcPf/1X3HPnnbzem7059/v1X/g5rrvhJsZhYL1e8cqv+VoAHB0c8OPf/7285wd/KLb50e/+Lt7wLd+SX/yJn2Bja4s3ePO34Kd+6Ad4jw/6EO73yz/9kzz6JV6SEoVv/NIvBolHPOYxvOYbvBF28oynPpXXf/O34H7f9fVfy7u+/wcym8/5ke/6Tt78Hd6BX/zJn+To8ID3+pAP4wX5pZ/6Sf7ij/6QT//SL+f2pz+dz/2Ej+Vrv/cHWGxs8KPf/Z283pu9BafOnAHgr//sT1ktl7zya74Wv/GLv8Df/eVf8NGf/pmA+dkf+REe9qhH8WIv/TI89UlP5A9+8ze4eO4cN9xyC2/+9u/IYmODu++8gyf9w99z84Mfwq/9/M/xsq/8Klx3ww387V/8OW/2du/AAz3ub/6GP/7d3+ZZJN73wz+Sf/jrv+LCuXO8xuu/AU978pO47+67yUz+8k/+mBMnT/KW7/TObO8cA+Dd3uQN+YYf+GGOnzzJnbfdxu/+2q9w3913c/raa3nzt39Hjp04wU//0A/yg9/+rbzRW701O8eO8w7v9d78zA//EK/46q/B9TfdxK/+3M/ysq/4SvzZH/4BT/i7v+WjPv0ziQhekHEY+JB3eUfe7yM+il/66Z/ic7/6a7nfL/3kT/BKr/la/OFv/yZPe+IT+chP+wx+9kd/mJd/lVflhptv4X733n03P/Jd38Hf/9Vf8sqv+Vq8+uu+Pg95xCP47V/5ZZ78hMeDzau97uvxUi//CgD86s/+DC/7yq/Mn/7+7/PEf/h7PvrTPxNJ/OFv/xZ/82d/yqlrruH13+wtOHn6ND/yXd/Ja73RG3HdDTcCsH/pEj/x/d/He3zwh/AT3/+9vP6bvTknT5/hgX77l3+J6266iUe/+EvwQ9/xbSyPjrjfS7/CK/Kyr/wqvN/bvhVf8PXfyHU33IhtfvfXfpV/+Ou/4tobbuQN3uIt2Tl2jHEY+Nkf/RFe6w3ekF/8qZ/g5OkzvPnbvwMvyLd99VfS9T3v/aEfzh//7u/wUz/4A3zxN30Lkvjub/x63vl93pf5YoMPe9d34hM/7wt50MMeRmuNX/rJn+BpT34SD3nEI1gdLTk8OOC9P+zDeeLf/z133XE7r/PGb8Jv/8ov87QnPZH7XXv9DbzZ278Dv/XLv8gNN9/Co17sxXmgvd1dfuEnfoy777iDnePHee03ehMe/uhH8/M//qO81Mu9Ajc/5CEAPPnxj+O2pz+d13vTN+OOZzyDW5/yZK694UZ+4xd+jld6zddiY2OTO2+/jdd9kzcFwDbf9fVfy3t88IfQdT3v/3ZvzRd8/Tdy7fU38IynPpU//t3f4e3f4z35iR/4PpZHR7zXh3wYAM942lP5vV//NVZHS17ltV+HF3vpl+bP//APGNZrXvV1Xpf7/dyP/giPfamXZvfCeTKTV3i1V+dxf/s3jOs1l3Z3+es/+1N2jh/nLd7hHTl15hqu+ldDf3Tb2lz1L/q7v/xLvvebv4Ev+9bv4Ll9wge8H+/zER/JY1/ypfjkD/5A3vNDPowbbr6Zz/m4j+HdPvCDePlXeVXuN00jv/frv8YPfce38zGf8dlsbm9x04MezDu9/uvwPT/3i2xsbgLwjV/2JTzooQ/lzd7uHfjUD/sQXvaVX4WXfoVX5O47buchD38ENz34wXz6R3wYb/8e78VLv+IrcscznsHf/9Vf8tBHPpK//fM/53d+7Vf4uu/7QQDe6y3elEc89rG80qu/Jg95xCN4+KMfwzu9/uvwnT/1s2xub/NAn/4RH8Y7vvf78OCHPZzP/riP5p3e+315pdd4TX7hJ36Mpz/5yXz4J38qAKvlkvd4szfmR379t7jt6U/jCz/5k3jn930/rr/xJh714i/Ol3/WZ/AKr/bqvM4bvwkAf/FHf8jP/MgP87lf/bV82od/KG/xju/EK7/mawHwDV/yRVx7ww286mu/Dp/5UR/Jt//kT3O/z/yoj+Ct3+VdedlXfhXud9/dd/OJH/T+fMuP/gSz+ZxxGPiAt38bvugbv5nf/43f4GB/j/f58I8E4MK5c3z0e70H3/sLv0Rm8h5v+sY85iVfkld97dfhIY94JJvb23zCB7wv3/Nzv8j9PvcTPpY3esu35uGPfjTf+03fyGw+53Xe+E254eab+cs/+WP+7A9+n0/8vC/gfu/0Bq/Ld/zkT7O1vcMHv9Pbc/1NN/OKr/4aPOyRj+KRL/ZivCDTNPEx7/2efPDHfyK/8BM/yku87MvzJm/ztgB86Lu8E5/4eZ/Pgx/+CAB+4vu/l73dXd7nwz+S3/jFX+Dv/vIv+OhP/0y+71u+iXvvvpuP/YzPIkrhj3/ntzFw/ORJfuaHf4jrb7yJ9/rQD+Mf/vqv+dav+nLOXHc9r/cmb8rDHv0Y7rj16fz0D/0gn/s1X8cDXTx/jnvuvAuAP/qd3+JpT3oSn/9138Av/MSP8YynPY0P/YRP4g9/6zf5tq/+St7ord6Gl3qFV+APf+s3ecLf/z1f+i3fhiTe7U3ekG/4gR/m+MmT/O1f/Dm7Fy5w7Q038Os//3Oslks+7rM/l7/9iz/n8z7h4/icr/5a+tmMhz/q0XzSB38A7/nBH8qLvfTL8EWf+snsX9rlpV7+FXjUi78EL/0Kr8gL8/u/+ev84W/9Jh//OZ/Ph73rO/GZX/6VXH/TzQB89sd+NOMw8DKv9Eo88rEvxku+3MvzKR/6wbzr+30AL/FyL8f9Lp4/z+/9+q/xO7/6K7z/R30M1990E5vb2/zsD/8QL/bSL825++7j27/mq/iK7/guTp25hi/85E/kYH+fl3qFV+BRL/bivPQrvCK/8BM/zl/+8R/xTu/zvjzl8Y/n13/h5/iSb/42vv9bv4Wu73j3D/xgAH7lZ36av/rTP+aTv+CL+bB3e2c+4XM/nwc/7OE80Fd//ufyYi/90rzBm78lT37845jGiWka+ZrP/zw+9BM/iZd95Vfh/d72rfiCr/9GrrvhRn70e76LZzz1qbz1u7wrf/sXf8Gf/+Hv8wVf/02sVys++J3egYc/+tG8xuu/Pg95xCN50EMfxguye+ECH/u+78UXf9O38oWf8om830d+DC/xsi8LwLu+8RvwTT/8oxw7foIPe9d34hM/7wt50MMexrd/zVdxz5138nbv/p7ceftt/PB3fDuv/nqvz3t/2Ifz6z//c/zdX/0lH/MZn8Wdt93G3u4uAD/63d/JQx75SN7zgz+Ur/rcz+YlX+7leb03e3Me6Is+5ZO46UEP5lVe+7W57557uPb6G3jYox7Fp3/kh/E27/JuvNyrvCoAv/XLv8Rf/NEf8vGf83n89Z/+Kd/zTV/PmWuv43Xf5E15+GMew1//6Z/yN3/x53zcZ30OALZ5x9d7bb7353+JxcYG7/92b80XfP030qbGF33KJ/GRn/rpPOKxj+VHv+e7WB4d8V4f8mHcdfvtfNGnfhLv+cEfynyx4Fu/8iv40E/6ZGrt+MrP+Sy+8Qd/GEWwt7vLh77rO/FNP/Sj/PxP/Bhtmnj3D/xgfvmnf4of+57v4s3e/h145GNfnF//+Z/lwvlzfO5Xfx1X/auhP7ptba76F/3qz/4Mf/5Hf8inftGX8Ny+4JM+gVd8jdfkDd78LfjkD/5A3v4934sf+a7v5K3f5V15tdd9PZ7brU99Cl/2mZ/ON/zADwOQmbzT678O3/Nzv8jG5iYA3/hlX8KDHvpQ3uzt3oFP/bAP5hVe7TV4i3d8J2qt3O/TP+LDePv3eC9e+hVfkQfK1njXN34Dvvtnf4H5YsF7vvmb8IEf+/G8+uu+Hvd7p9d/Hb7zp36Wze1tHujTP+LDeIt3fCd+8ge+jzd9u7fntd7gjQD4hZ/4MZ7+5Cfz4Z/8qQCslkve483emB/59d8iIvjwd3sXPv5zPpcHP/wRAHzpZ3war/Bqr87rvPGbAPAXf/SH/MyP/DCf+9Vfy2//8i/xR7/723zKF34J6/WaD3z7t+Urvv07GYY1n/lRH8m3/+RPc7/P/KiP4K3f5V152Vd+FR7oCz7pE3iN138DXvMN3pA//p3f5hd+4sf5vK/9en7se76bg/093ufDPxKAC+fO8dHv9R587y/8EpnJO73+6/CpX/ylvMwrvhIA991zD5/wAe/L9/zcL3K/z/2Ej+WN3vKteaXXeE2+55u+gcXGBu/4Xu8DwG/98i/xZ3/w+3zi530B93unN3hdvuMnf5qt7R0++J3enrd79/fkDd7iLXlR/MFv/gY/+B3fRkThq77re6i1AvCh7/JOfOLnfT4PfvgjAPiJ7/9e9nZ3eZ8P/0h+4xd/gb//q7/k5gc/hMf/3d/wSZ/3hdSu47n9+R/+Ib/wEz/GZ33FV/EPf/3XfP4nfhzf/hM/zeb2NgB/+cd/xE//0A/yuV/zdTw/5+69l0//yA/nc77qa7j2hhv4hZ/4MZ7xtKfxoZ/wSfzhb/0mP/yd38HXft8PAJCZfPA7vT2f+HlfwMMf/Rje7U3ekG/4gR/m+MmTPNCtT30KX/HZn8nXfd8Pslwe8Z5v9ib86G/8NpIA+KQP/gDe84M/lBd76Zfhiz71kzl9zTV8wEd/LC+Kz/34j+GN3/ptecVXfw1+8Nu/DTt5tw/4IAA++2M/moc+8pG85wd/KPf7lA/9YN71/T6Al3i5l+OB/upP/4Sf+P7v5fO/9ht4fj7joz6ct3/39+SlXuEV+cJP/kSuveEG3u8jP5r7fcg7vwOf+HlfyEMe8QgAPuxd35mP/NRPY3Nrm8/9hI/lm374xyil8Okf8WG8xTu8E6/0mq/Jh73bO/MJn/v5PPhhD+eBvvrzP5cXe+mX5g3e/C253/d/6zdzuH/AB33cxwPwfm/7VnzB138j115/A+/9Vm/Ol37zt3HtDTeQmbz/2741n/PVX8vpa67hPd/8Tfjcr/5aHvOSL8WL4ke+6zv5vV//VW64+RY+9Yu/lPu96xu/Ad/0wz/KseMn+LB3fSc+8fO+kJsf8hDe/U3ekK/8zu/huhtvBOBrv/Dz2Tl2nPf+sA/n13/+5/i7v/pLPuYzPov7/dWf/gnf/y3fzBd/07fQ9T1f9bmfzUu+3Mvzem/25jzQF33KJ3HzQx7CO77X+9DPZtzv0z/yw3ibd3k3Xu5VXhWA3/rlX+Iv/ugP+fjP+Tz++k//lC/7rE/n23/yp1ksNgD49Z//Of7mL/6cj/uszwHANu/4eq/N9/78L7HY2OD93+6t+djP+hy++cu/jA/8mI/jxV/mZQD40e/5LpZHR7zXh3wYP/Bt30K25D0++EMA+KHv+HYODw54/4/6aD7hA9+P9/jAD+ElX/7l+eWf/kn+/q//mo//7M/lh77z22nTxLt/4Afzyz/9U/zur/0qX/gN3wTAfffcw0e/93vwg7/8a1z1r4b+6La1uepf9Nd/9qf88Hd+B1/8Td/Cc/ukD/5A3u0DPpCXfLmX55M/+ANZHh2xWi35iu/4bra2t3lutz71KXzZZ3463/ADPwxAZvJOr/86fM/P/SIbm5sAfOOXfjEPetjDeLO3ewfO3nsP3/tN38iTHvc43vit34a3fKd3ppTCp3/Eh/H27/FevPQrviJ/+xd/zk/+wPcDUGrh7/7iL/iun/l5Nre2eM83fxO+/Nu+k2uuv577vdPrvw7f+VM/y+b2Ng/06R/xYexd2mV5dMRXfMd3s3PsGAC/8BM/xtOf/GQ+/JM/FYDVcsl7vNkb8yO//ltEBB/+bu/Cx3/O5/Lghz8CgC/9jE/jFV7t1XmdN34TAP7ij/6Qn/mRH+Zzv/prWa/XfMg7vwNf8e3fyeP+5m/4zV/6BT7jy76Su26/jc/8qI/k23/yp7nfZ3zUh/M27/JuvOwrvwoP9Ce/97v88k//JJ/1FV/Nl37Gp/Fyr/KqvN6bvhk/9j3fzcH+Hu/z4R8JwPmzZ/mY935PvvcXfonM5J1e/3X47p/5eTa3twG47557+IQPeF++5+d+kft97sd/LG/0Vm/NK73Ga/I93/QNLDY2eMf3eh8AfuuXf4k/+4Pf5xM/7wu43zu9/uvwHT/1M2xt7/DB7/T2fPIXfjEPftjDeVHY5qPf+z14i3d8Z17/zd6c+33ou7wTn/h5n8+DH/4IAH78+76X/Uu7vM+HfyS/8Yu/wE/+wPdx4dw5PvBjPo7XeeM34X4/88M/xJ/+/u/Rz2YcHRwwWyz43K/+Wv7hr/+a7/y6r+YrvuO7ud9f/vEf8dM/9IN87td8Hc8tM/mcj/sYXueN3pjXfuM3AeAXfuLHeMbTnsaHfsIn8Ye/9Zv8xi/+Ap/xZV/B/T7joz6cN3u7d+CVX/O1eLc3eUO+4Qd+mOMnT/Kbv/QL/OYv/SJd1zEOIxfPn+MbfvBHWC6PeM83exN+9Dd+G0kAfNIHfwDv+cEfyou99MvwRZ/6ybzqa782r/WGb8y/5N677+Ij3v1decRjHkutlf39PfYv7fHNP/JjlFL47I/9aN7ord6aV3mt1+Z+n/KhH8y7vt8H8BIv93I80F/96Z/wE9//vXz+134DAHffcQff/63fzMHeHqVWnv7kJ/MRn/KpvOwrvwpf+MmfyKu/3uvzmm/whgAcHhzw3m/15tx48y08m3nX9/9AXvHVX4PP/KiP4K3e+V246UEP5lM//EP4lh/5cWrX8WHv9s58wud+Pg9+2MN5oK/+/M/lxV76pXmDN39LAP7hr/+ab/vqr+CLv/lbmc8XALzf274VX/D130iJwoe/+7tw/U0382zm/T7yY3j4ox/Ne775m/BDv/ob1Fp5USyPjnj/t3trPuPLvoJHv/hLcL93feM34Jt++Ec5dvwEH/au78Qnft4Xsn3sGB/6ru/ED//Kr4MEwI9+93dxdHjIe3/Yh/PrP/9z/N1f/SUf8xmfBcDepV0++UM+iE/6/C/kQQ99GABf9bmfzUu+3Mvzem/25jzQpYsX+d5v+gb+9i//gtd70zfn7d79Pej6nk//yA/jbd7l3Xi5V3lVAH7rl3+Jv/ijP+TjP+fz+Os//VN++Lu+gy/+pm/hfr/+8z/H3/zFn/Nxn/U5ADiTd3z91+F7f/6XWGxs8P5v99Zsbm1TSuFLvvlb6foegB/9nu9ieXTEe33Ih/FFn/JJ3PrUp7DY2OR+j3rxF+dDPv4T+dWf/Rke/7d/w0d9+mfyqR/+Ibzdu78nL/fKr8IPfee306aJd//AD+aXf/qneOI//D0f9WmfAcB6teLd3/SN+LHf/B2u+ldDf3zb2lz1L9q9cIEPeZd35Bt+4Ic4efoM97tw7iwf9m7vwrf+2E+wvXOMT/rgD+SN3uqtufO2Z3DnbbfxSZ//hUjigW596lP40s/8dL7xB34YANu84+u/Dt/+4z/FsRMnAPiiT/tkXvJlX443e7t34H733n0X3/ilX8JLvOzL8vbv8V582kd8GG//Hu/FY1/qpXift34LPv2Lv4zHvtRLMQ4D7/omb8h3/8zPs7m1xXu8+Zvw1d/1vZw6c4b7vePrvw7f9VM/y+b2Ng/0aR/xYbzWG7wh58+e5alPeiKf9sVfiiR+8ad+gif+/d/zMZ/xWQDcd/fdfOi7vTM/+uu/RUTwYe/2Lnz853wuD3n4IwD4ss/6DF7q5V+eN3yLtwLgN3/pF/ntX/llPvervxaA7/i6r+H0NdfyhL//O171tV+H13i91+fuO+7gkz7kg/ien/15JAHwke/1HrzXh3woL/fKr8IDtdb4kHd5Rz7ti7+Uz/qYj+KbfuhHWWxs8OPf972cP3sfH/SxHw/A05/yZD7zoz6S7/uFXyIzecfXfx2+/xd+mfliAcC5++7lo97rPfi+X/hlIgKAj/uA9+Ud3/O9eaXXeE2+55u+gcXGBu/4Xu8DwO/86q/we7/x63z6l3wZAAf7e7z3W70F3/0zP8fW9g4f9E5vz6d/yZdz84MfzIvqMz7qI3jzd3hHXunVX4P7fdi7vTMf9WmfySMf+1gAvvPrvxaA9/3wj+Q3fvEX+M1f+kXe/yM/ms//pI/nc7/667jxllv4sz/8A77tq7+Sr/2e72e+WPDHv/s7/OJP/gSf+9Vfyz/89V/z3d/09XzZt3w79/uLP/4jfvqHfpDP+5qv47n99A//IE994hP5uM/6HO73Cz/xYzzjaU/jQz/hk/iD3/pNfvqHfpAv+9Zv534f9u7vwod+wifxYi/10rzbm7wh3/ADP8zF8+f5jI/6cL7u+36QE6dO8ZQnPJ6v/NzP5ht/8EdYLo94jzd7E37sN34bSQB84gd/AO/5wR/Ki7/0y/BFn/rJvMbrvT6v/nqvz7/kh77z27lw7hxv/FZvw/2+8cu/hHd+7/flFV7t1fnsj/1o3uzt3p5XeLVX536f/KEfzLu+3wfwki/3cjzQX/3pn/AT3/+9fP7XfgMAn/YRH8bLvfKr8Lbv9u4AfPKHfhDv8J7vzcu98qvwBZ/8ibz2G70xr/Y6rwuAbd77rd6cr/3eH+DY8eM8t9/9tV/lz/7wD3jwwx/O3sVd3ufDPwKAD323d+YTP/fzefDDHs4DffXnfy4v9tIvzRu8+VtyeHDAJ33wB/DRn/5ZPPzRj+Z+7/u2b8UXfv03cur0Gd7rrd6c7/7pn6OfzXig5dER7/Hmb8KP/+bv8K/xPm/9FnzB130DN9x8C/d7lzd+A775h3+UY8dP8KHv+k580ud9IdffdBPv9qZvxPf+3C+w2NgE4Hu+6RvINO/zYR/Or//8z/F3f/WXfMxnfBYAX/qZn8ZjXuKleIt3eEfu95Wf+9m85Mu9PK//Zm/O83P+3Fm+7au+kmuvv4H3+fCP4DM+6iN4s7d7e175NV8LgJ/+4R/iyY9/HJ/wOZ/HX//pn/Jj3/c9fMHXfQP3+41f/AX+7A9+n0/+gi8CYPfiRd7/7d6a7/v5X2KxscH7vd1b85Gf8mn85i//EltbW3zAR38sAD/6Pd/F8uiI9/qQD+Nbv/orufHmW3izt3t7ntvy6JAPe7d34TO//Cv5gk/+RL75h3+MUgo/9J3fzjRNvMcHfjC/9NM/xVOe8Hg+4pM/FYD1asW7vekb8eO/+Ttc9a+G/vi2tbnqRfL1X/JF3HPnnXzwx30C1990E3ffeQff8hVfzs0PfjAf+DEfB8AnffAH8l4f8mE86sVejM/46I/klV7jNXmrd3pnHmj/0iU+4B3fjm/6wR/hxKlTAHzYu70Lb/I2b8ubvd3b84ynPY1P+/AP4V3f/wN4s7d7B572pCfxkEc8Att87zd/I9mS9/2Ij+TTPuLDePv3eC8e8ehH8z5v+1Z89Xd9D6fPXMPP//iP8cPf9R1898/8PJtbW7zHm78JX/1d38upM2e43zu+/uvwXT/1s2xub/NAn/YRH8Y7vff78OIv/TJ81sd9NC/9Cq/I273be/AXf/xHfOOXfQlf+s3fxolTp/ieb/oGfuEnfpwf/fXfIiL4zI/5KF7z9V6f13/ztwDge7/5G7nt1qfzcZ/1OWDz+Z/8iZQofO5Xfy0Atz396Xz9l3whF86d4xt/4IfpZzPW6zXv/ZZvxsd91ufw8q/6avzln/wxX/gpn8SnfOEX83Kv/Co8tx/6zm/nH/76r7n2hhv4iE/+VAB+79d/jR/+ru/kC77uG9g+doxv+cov549++7f5vl/4JTKTd3z91+H7f+GXmS8WAEzTxHu+xZvyEZ/8qbzKa702f/sXf8HnfeLH8fGf/bm80mu8Jj//4z/G3//VX/KJn/cFRASP/7u/5Qs++ZP4ym//Ts5cdx0/+j3fxY997/fw3T/zc2xt7/BB7/T2fPqXfDk3P/jB3O/Hv+97eZXXem1uvOUWnp/P+KiP4M3f4R15pVd/De73OR//sTzooQ/l3T/wg7l4/jyf9hEfxiu/5mvyvh/+kfzGL/4Cf/eXf8FHf/pn8hu/+Av8wk/8OF/0jd/EH/32b/NzP/ajfMk3fQuXdnf55q/4MtarFZ/71V/LP/z1X/Pd3/T1fNm3fDv3+4s//iN++od+kM/7mq/jgZ7+lCfz5Z/1GXzJN38rW9s73O8XfuLHeMbTnsaHfsIn8Qe/9Zt89ed/Lp/9lV/NY1/ypfi9X/81vuebv5Fv/IEfZjaf825v8oZ8ww/8MHc841a+6vM/l2/4/h9iGAa+95u/kcf9zV/zjT/4I9jmfd76Lfi0L/4yHvGYxwDwiR/8AbznB38oL/7SL8MXfeon8xqv9/q8+uu9Pvf7jV/8BR788IfzsEc+ivtlNj74nd+JT/viL+FBD30Y9/uln/4p/ubP/4xP/vwv5LM/9qN5s7d7e17h1V6d+33yh34w7/p+H8BLvtzL8UB/9ad/wk98//fy+V/7DQB89Pu8J2/1Tu/Ca73hG/GXf/LHfMVnfyYf/zmfx8u98qvwBZ/8ibz2G70xr/Y6r8v9vv5LvoiI4P0/8qPp+p47nnEr191wI13fMwwDH/me787W9jYf/kmfwoMf/nAAPvTd3plP/NzP58EPezgP9NWf/7m82Eu/NG/w5m/J13zB53HTgx7M2737e/BA7/u2b8UXfv03ct0NN/Iln/6pXHP9DbzHB34QpVZufepTeNBDH8Z6teI93vxN+PHf/B3ut1ou+ekf/iHe9l3fjX424/l5n7d+C77g676BG26+hfu9yxu/Ad/8wz/KseMn+NB3fSc+6fO+kAc97GF81sd+FC/2Ui/DO7zne3Hxwnk+/SM+jFd4tdfgfT7sw/n1n/85/u6v/pKP+YzP4jd+8Rf4g9/6DT7jS78CSdzvKz/3s3nJl3t5Xv/N3pwHetqTn8SDH/ZwJPET3/993HHbM/joT/sMvv5LvohpHPnQT/gkVqsVn/2xH831N93EJ3zO5/HXf/qn/Nj3fQ9f8HXfwP3+/q/+ii/7rE/ny7/tOzl9zTX80Hd8Oz/5g9/P9/38L7HY2OD93u6t+cKv/0Z2jh3nEz/oA3in93lfXv11X48f/Z7vYnl0xHt9yIfxV3/6J3zn138tn/ZFX8p1N97I/t4llodHXHP99QB805d/GXfe9gwe9WIvznt80AcD8EPf+e1M08R7fOAH80s//VM85QmP5yM++VMBWK9WvNubvhE//pu/Q2byY9/7Pbzp274t2zvHuOpfhP74trW56kXSWuMnf+D7+b1f/zUu7V7k2ImTvPYbvRFv/c7vSkQA8GWf+em8zbu+Gw9/9GM4e+89fOlnfDof8xmfyQ0338IDfd+3fDO/9xu/xou91EvzUZ/2Gfz1n/0p3/UNX8+wXvGIxzyWmx/yEM5ccy2v/UZvzFd8zmfx5Mc/nosXzvMyr/CKfPDHfQLHT57kKz/3s3njt34bHvuSL8XP//iP8eu/8HOUWnnDN39L/uYv/pyP+ORPZbGxwSd84PvzaV/8pRw/eZL7feR7vTtf/I3fwsbmJg/0lZ/72bzp274dj37xl+D82bN88ad/Ch/5KZ/Gjbc8iG/9qq/kz/7w9zl+4gRv9vbvwK/89E/zxd/4zSiCv/6zP+Vbv+orqF3HF3ztNzBNE1/3xV/IbU9/GmeuvY43fuu34a/+9E/46E/7DO73qR/xoTzooQ/jgz7m47jfb/7yL/Jj3/s9RAQv84qvhIBXfs3X4sVe+mV4bmfvuYcPfbd35rO+4qt48Zd+GQCmaeIbv/SL+Zu/+HNOnDzFW7/Lu/LzP/ajfPE3fQvO5CPf6z348m//DmazOff73V/7VX74u78TIV7y5V6e2XzGy7ziK/FSL/8KXDx/nq/43M/i3L338p4f/KG86mu/Dt/9jV/P7//Gb7B97Bhv+BZvyZ/83u/yiZ/3+WxsbvEZH/URfNgnfjLX3XgjAMujI97nrd+Cb/vxn2R75xjPz1d//ufyOm/8JrzUy78C93vak57EN3/ll7F74SK3POQhvOwrvzJHB4e8/Xu8J3/0O7/NE//h73nvD/1wAL7lK7+c09dcw5u//Tvy7V/zVTz+7/6OnePHePv3eC9+99d/jY/+tM/gyY9/PD/5g9/PJ33eF3C/f/jrv+LXfv7n+OhP/0we6Ae+7Vv5sz/4fWrXcb/P/eqv4U9///e587bbeLcP+ED+4Ld+k9/8xV/gxOnTPP5v/5aNrU3e7yM+ike/+EsA8LHv/z589ld8FVvbO3zPN30Df/nHf8xic4N3fu/35Rd/6if49C/5cgB+6ad+kp/6oR/g2utv4PO+5uv40s/8dN7mXd6VRzzmsXzzV3wZL/+qr8bLv8qrcr/P/JiP5JVf47V407d9O+73xH/4e37yB76fT/nCL+aBDvf3+YyP/kg+72u+ju/4uq/htd/ojXnJl3057vfln/0ZvMU7vBOPerEX54Ee9zd/w6/87E/zMZ/xWQD85Z/8MT/+fd/Dwf4+L/Xyr8DW9jYv/tIvw4u99MvwTV/+pbzSq78mL/vKr8z9xnHke77x6/nbv/gLlssjbrj5Fj7587+QxcYGAN/1DV/H4/7mb/iyb/127vfZH/fRfMBHfQw33vIgHui7v/HrecRjHsuLv8zL8ukf8WH0sxmSAHiV13ot3u7d35NP+bAP5uM+63M4fc21rFYrvvPrvobH/e3fsF6tueUhD+FTv+hLGIeBT/jA9+frvu8HuN89d93FJ3/IB/Ll3/YdnL7mWp6fT/6QD+JjPvOzufb667nfx7zve/O5X/21bO/s8Fkf+9F84Ed/LDfecgv33X033/yVX8Y9d97Jjbc8iJd9pVfm6OiQt3u39+APfus3edLj/oH3+bCP4PM/6RM4f/YspRQAzlx7LZ/0+V/Id3391/GoF39xXvW1X4cH+uav/HL++k//FAluuPlmPvBjPp5rr7+ee+66k2/4ki/mnrvu5LobbuS13+iNefpTnsz7f+RH87i//Rt++ad/io/9zM/mfrb5zq//Wv7ot3+bnePHeKO3eht+/zd+nU//ki9jNp/zqR/+oXzsZ342p6+5hqc9+Ul8y1d8OZ/yRV/CH/7Wb7JaLXnbd313AH7313+VX/qpn+LcffeyubXFe3/oh/PSr/CKADz5CY/nUz70g/nq7/pebnrQgwD4+R//UdrUeKt3fhd+99d+lWc87am8xwd9CADDes3Hvf/78nXf9wMcHhzw4e/+LnzGl30FD33EI7nqX4T++La1uep/vNue/jS+/Wu+mk/6/C9kc2uL/+0yk498r3fnoz/tM3j4ox/Dv8WTH/84vuYLPp+v+74fQBL/E/39X/0Vv/CTP84nfd4X8H/JH/zWb/Lbv/LLfNoXfylX/et81ed9Do9+iZfgTd76bbnq/5Y/+8M/4Kd/6Af4gq/7Rq76T4f++La1uep/hZ/4ge9jvljwZm/79vxv1Vrjrttv59d//uc4f+4sH//Zn8u/1v7eHnffcTvf/rVfw9u8y7vyKq/12vxPdfuttyKJmx70IP4v+YPf+k1++1d+mU/74i/lqhfNPXfdyd/+xZ/z8z/2Y3zFd3wXXddx1f8Nl3YvcuczbuObvuLL+NCP/0Qe85IvyVX/6dCf3L42V/2P933f8s20NvE27/JuHDtxgv+tjg4P+arP/1yuufY63um934ed48f51/qLP/4jfuVnfoaXfPmX583f7u256r/e3//1X/E3f/7nvNv7fwBXvWi+8Uu/hGEYeNt3e3duechDuOr/jt/9tV/jD377N3ml13hNXveN34Sr/kugP7l9ba666qqrrrrqqqv+90B/cvvaXHXVVVddddVVV/3vgf7k9rW56qqrrrrqqquu+t8D/enta3PVVVddddVVV131vwf609vX5qqrrrrqqquuuup/D/Snt6/NVVddddVVV1111f8e6E9vX5urrrrqqquuuuqq/z3Qn94xmKuuuuqqq6666qr/PdCf3TGYq6666qqrrrrqqv890J/dMZirrrrqqquuuuqq/z3Qn90xmKuuuuqqq6666qr/PdCf3TGYq6666qqrrrrqqv890J/fMZirrrrqqquuuuqq/z3Qn98xmKuuuuqqq6666qr/PdCf3zGYq6666qqrrrrqqv890J/fMZirrrrqqquuuuqq/z3Qn985mKuuuuqqq6666qr/PdBf3DmYq6666qqrrrrqqv890F/cOZirrrrqqquuuuqq/z3QX9w5mKuuuuqqq6666qr/PdBf3DmYq6666qqrrrrqqv890F/eOZirrrrqqquuuuqq/z3QX945mKuuuuqqq6666qr/PdBf3jmYq6666qqrrrrqqv890F/eNZirrrrqqquuuuqq/z3QX941mKuuuuqqq6666qr/PdBf3TWYq6666qqrrrrqqv890F/dNZirrrrqqquuuuqq/z3QX901mKuuuuqqq6666qr/PdBf3TWYq6666qqrrrrqqv890F/fNZirrrrqqquuuuqq/z3QX981mKuuuuqqq6666qr/PdBf3zWYq6666qqrrrrqqv890F/fPZirrrrqqquuuuqq/z3QX989mKuuuuqqq6666qr/PdDf3D2Yq6666qqrrrrqqv890N/cPZirrrrqqquuuuqq/z3Q39w9mKuuuuqqq6666qr/PdDf3D2Yq6666qqrrrrqqv890N/ePZirrrrqqquuuuqq/z3Q3949mKuuuuqqq6666qr/PdDf3j2Yq6666qqrrrrqqv890N/eM5irrrrqqquuuuqq/z3Q394zmKuuuuqqq6666qr/PdDf3TOYq6666qqrrrrqqv890N/dM5irrrrqqquuuuqq/z3Q390zmKuuuuqqq6666qr/PdDf3TOYq6666qqrrrrqqv890N/fM5irrrrqqquuuuqq/z3Q398zmKuuuuqqq6666qr/PdDf3zuaq6666qqrrrrqqv890N/fO5qrrrrqqquuuuqq/z3Q3987mquuuuqqq6666qr/PdA/3Duaq6666qqrrrrqqv890D/cO5qrrrrqqquuuuqq/z3QP9w7mquuuuqqq6666qr/PdA/3Duaq6666qqrrrrqqv890OPuHc1VV1111VVXXXXV/x7ocfeO5qqrrrrqqquuuup/D/S4+0Zz1VVXXXXVVVdd9b8Hetx9o7nqqquuuuqqq6763wM97r7RXHXVVVddddVVV/3vgR5/32iuuuqqq6666qqr/vdAj79vNFddddVVV1111VX/e6DH3zeaq6666qqrrrrqqv890OPvG81VV1111VVXXXXV/x7oCfeN5qqrrrrqqquuuup/D/SEs6O56qqrrrrqqquu+t8DPeHsaK666qqrrrrqqqv+90BPODuaq6666qqrrrrqqv890BPOjuaqq6666qqrrrrqfw/0xLOjueqqq6666qqrrvrfAz3x7Giuuuqqq6666qqr/vdATzw7mquuuuqqq6666qr/PdATz47mqquuuuqqq6666n8P9KSzo7nqqquuuuqqq6763wM96dxorrrqqquuuuqqq/73QE86N5qrrrrqqquuuuqq/z3Qk86N5qqrrrrqqquuuup/D/Skc6O56qqrrrrqqquu+t8DPfncaK666qqrrrrqqqv+90BPPjeaq6666qqrrrrqqv890JPPjeaqq6666qqrrrrqfw/05HOjueqqq6666qqrrvrfAz3l/Giuuuqqq6666qqr/vdATzk/mquuuuqqq6666qr/PdBTzo/mqquuuuqqq6666n8P9JTzo7nqqquuuuqqq6763wM95fxorrrqqquuuuqqq/73QE89P5qrrrrqqquuuuqq/z3QU8+P5qqrrrrqqquuuup/D/TU86O56qqrrrrqqquu+t8DPfX8aK666qqrrrrqqqv+90BPuzCZq6666qqrrrrqqv890NMuTOaqq6666qqrrrrqfw/0tAuTueqqq6666qqrrvrfAz3twmSuuuqqq6666qqr/vdAT78wmauuuuqqq6666qr/PdDTL0zmqquuuuqqq6666n8P9PQLk7nqqquuuuqqq6763wM9/cJkrrrqqquuuuqqq/73QE+/MJmrrrrqqquuuuqq/z3QrRcnc9VVV1111VVXXfW/B7r14mSuuuqqq6666qqr/vdAt16czFVXXXXVVVddddX/HujWi5O56qqrrrrqqquu+t8DPePiZK666qqrrrrqqqv+90DPuDiZq6666qqrrrrqqv890DMuTuaqq6666qqrrrrqfw/0jIuTueqqq6666qqrrvrfAz1jdzJXXXXVVVddddVV/3ug23Ync9VVV1111VVXXfW/B7ptdzJXXXXVVVddddVV/3ug23Ync9VVV1111VVXXfW/B7ptdzJXXXXVVVddddVV/3ug23cnc9VVV1111VVXXfW/B7p9dzJXXXXVVVddddVV/3ug23cnc9VVV1111VVXXfW/B7p9dzJXXXXVVVddddVV/3ug2y9N5qqrrrrqqquuuup/D3THpclcddVVV1111VVX/e+B7rg0mauuuuqqq6666qr/PdAdlyZz1VVXXXXVVVdd9b8HuuPSZK666qqrrrrqqqv+90B3XprMVVddddVVV1111f8e6M5Lk7nqqquuuuqqq6763wPdeWkyV1111VVXXXXVVf97oDv3JnPVVVddddVVV131vwe6c28yV1111VVXXXXVVf97oLv2JnPVVVddddVVV131vwe6a28yV1111VVXXXXVVf97oLv2JnPVVVddddVVV131vwe6a28yV1111VVXXXXVVf97oLv3JnPVVVddddVVV131vwe6e28yV1111VVXXXXVVf97oLv3JnPVVVddddVVV131vwe6e7+Zq6666qqrrrrqqv890N37zVx11VVXXXXVVVf974Hu2W/mqquuuuqqq6666n8PdM9+M1ddddVVV1111VX/e6B79pu56qqrrrrqqquu+t8D3bPfzFVXXXXVVVddddX/Huje/Wauuuqqq6666qqr/vdA9+43c9VVV1111VVXXfW/B7r3oJmrrrrqqquuuuqq/z3QvQfNXHXVVVddddVVV/3vge49aOaqq6666qqrrrrqfw9030EzV1111VVXXXXVVf97oPsOmrnqqquuuuqqq6763wPdd9DMVVddddVVV1111f8e6L6DZq666qqrrrrqqqv+90BnD5q56qqrrrrqqquu+t8DnT1o5qqrrrrqqquuuup/D3T2sJmrrrrqqquuuuqq/z3Q2cNmrrrqqquuuuqqq/73QGcPm7nqqquuuuqqq6763wOdO2zmqquuuuqqq6666n8PdO6wmauuuuqqq6666qr/PdC5w2auuuqqq6666qqr/vdA5w6bueqqq6666qqrrvrfA50/bOaqq6666qqrrrrqfw90/rCZq6666qqrrrrqqv890PmjZq666qqrrrrqqqv+90Dnj5q56qqrrrrqqquu+t8DnT9q5qqrrrrqqquuuup/D3ThqJmrrrrqqquuuuqq/z3QhaNmrrrqqquuuuqqq/73QBeOmrnqqquuuuqqq6763wNdOGrmqquuuuqqq6666n8PdPGomauuuuqqq6666qr/PdDFZTNXXXXVVVddddVV/3ugi8tmrrrqqquuuuqqq/73QBeXzVx11VVXXXXVVVf974EuLpu56qqrrrrqqquu+t8D7S6bueqqq6666qqrrvrfA+0um7nqqquuuuqqq6763wPtLpu56qqrrrrqqquu+t8D7S6bueqqq6666qqrrvrfA11aNnPVVVddddVVV131vwe6tEpz1VVXXXXVVVdd9b8HurRKc9VVV1111VVXXfW/B7q0SnPVVVddddVVV131vwe6tEpz1VVXXXXVVVdd9b8H2lulueqqq6666qqrrvrfA+2t0lx11VVXXXXVVVf974H2Vmmuuuqqq6666qqr/vdAe6s0V1111VVXXXXVVf97oP11mquuuuqqq6666qr/PdD+Os1VV1111VVXXXXV/x5of53mqquuuuqqq6666n8PtL9Oc9VVV1111VVXXfW/B9pfp7nqqquuuuqqq6763wMdrNNcddVVV1111VVX/e+BDtZprrrqqquuuuqqq/73QAfrNFddddVVV1111VX/e6CDdZqrrrrqqquuuuqq/z3Q4ZDmqquuuuqqq6666n8PdDikueqqq6666qqrrvrfAx0Oaa666qqrrrrqqqv+90CHQ5qrrrrqqquuuuqq/z3Q0ZDmqquuuuqqq6666n8PdDSkueqqq6666qqrrvrfAx0Naa666qqrrrrqqqv+90BHQ5qrrrrqqquuuuqq/z3Q0Zjmqquuuuqqq6666n8PtBzTXHXVVVddddVVV/3vgZZjmquuuuqqq6666qr/PdByTHPVVVddddVVV131vwdajmmuuuqqq6666qqr/vdAqzHNVVddddVVV1111f8eaDWmueqqq6666qqrrvrfA63GNFddddVVV1111VX/e6DVmOaqq6666qqrrrrqfw+0mtJcddVVV1111VVX/e+B1lOaq6666qqrrrrqqv890HpKc9VVV1111VVXXfW/B1pPaa666qqrrrrqqqv+90DrKc1VV1111VVXXXXV/x5omNJcddVVV1111VVX/e+BhinNVVddddVVV1111f8eaJjSXHXVVVddddVVV/3vgYYpzVVXXXXVVVddddX/HmhoNlddddVVV1111VX/e6Cx2Vx11VVXXXXVVVf974HGZnPVVVddddVVV131vwcam81VV1111VVXXXXV/x5obDZXXXXVVVddddVV/3ugqdlcddVVV1111VVX/e+BpmZz1VVXXXXVVVdd9b8HmprNVVddddVVV1111f8eaEqbq6666qqrrrrqqv890JQ2V1111VVXXXXVVf97oJY2V1111VVXXXXVVf97oJY2V1111VVXXXXVVf97oJY2V1111VVXXXXVVf97oJY2V1111VVXXXXVVf97oEybq6666qqrrrrqqv89UKbNVVddddVVV1111f8eKNPmqquuuuqqq6666n8PlLa56qqrrrrqqquu+t8DpW2uuuqqq6666qqr/vdAts1VV1111VVXXXXV/x7Itrnqqquuuuqqq67634N/BDnYAbzHYzSNAAAAAElFTkSuQmCC","data:image/png;base64,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","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG4AAAAkCAYAAABomA/xAAACZklEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yr2T7wcBbAS8NPBh4ba76t/ht4Fbgr4GfkXQrLzrEi8j2ewEfDbw0V/1n+GvgqyV9D/8yxL/A9msD3wU8mKv+K9wKvI+k3+YFI3gBbB+3/VXAbwEP5qr/Kg8Gfsv2V9k+zvOHeD5sHwd+C3hprvrv9NfA60ja5Tkhnovt48BvAS/NVf8T/DXwOpJ2eTbEA9g+DvwW8NJc9T/JXwOvI2mXKwie02cDL81V/9O8NPDZPBvimWy/NvBbXPU/2etI+m0A8Uy2nw48mKv+J7tV0kMAAsD2ewMP5qr/6R5s+70BBGD7r4CX5qr/Df5a0svI9oOBp3PV/yYPqcBbc9X/Nm9dgZfmqv9tXroCD+aq/20eLNvmqv9tdmXbXPW/DcFV/xtRuep/o0sB/A5X/W/z1wHcylX/29wawF9z1f82fy3bDwaezlX/mzwkJN0K/A1X/W/xN5JuDa74aq763+KrAcQz2b4VeBBX/U/2DEkPBgie7b256n+69+YKgmeS9NvA13DV/1RfI+m3uQLxALaPA78NvBRX/U/yN8BrS9rlCsRzsX0c+G3gpbjqf4K/AV5b0i7Phng+bB8Hfht4Ka767/Q3wGtL2uU5ETwfknaB1wa+hqv+u3wN8NqSdnleiH+B7dcGvht4EFf9V3gG8N6SfpsXjOBfIOm3JT0YeB/gb7jqP8vfAO8j6cGSfpsXDvGvZPvBwFsDLw08GHgtrvq3+B3gVuCvgZ+WdCsvOv4RLouZd0WCbO0AAAAASUVORK5CYII=","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAcCAYAAAD2izi6AAAB2ElEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yIrD90sBbAa8NvDRwnP+bdoG/Bn4b+BlJf80Lh3ghbL8X8NnAg/n/6VbgsyV9D88f4vmw/WDgu4DX5iqA3wbeR9KtPCfEc7H92sBPAce56oF2gbeR9Ns8G+IBbL828Ftc9cK8jqTf5grEM9l+aeC3gONc9cLsAi8j6VaA4Nm+CzjOVf+S48B3cQUBYPu9gZfmqhfVa9t+bwAB2H468GCu+te4VdJDZPulgb/iqn+Ll6nAW3PVv9VbV+C1uerf6rVl+yJwnKv+LXZl21z1b0Vw1b8HAVziqn+rSwH8NVf9W/11AH/NVf9Wvy3bLw38FVf9W7yMAGzfCjyIq/41niHpwcEVn81V/1qfDSCeyfZfAy/FVS+K35H02gDimWw/GPhr4BhXvTCXgJeWdCtA8EySbgXemqv+JW8t6VauIHgASb8NvA5wiaue2yXgdST9Ns9G8Fwk/Tbw0sDvcNX9fgd4aUm/zXMieD4k3SrptYH3AZ7B/1/PAN5H0mtLupXnhXgR2H5p4K2B1wZeGjjG/02XgL8Gfhv4aUl/zQvHPwIafHG12sFg9wAAAABJRU5ErkJggg==","data:image/png;base64,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","data:image/png;base64,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","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAbCAYAAAA+nNxPAAAFG0lEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1S/4v4Hg/waC/xsI/m8g+L+Byn+TS19y0yuqxB/wTK3EmRMfc+su/zZUnsnf8nLd/v7ZfZ7XPnAOuBv45Y7yI4uPf/oz+PcKBFT+lS59+S27gjkA9i/ufMLtbwsQPNPj7l4JmAEzYAbMgBlwGng08DrAlwy0f9j/8ptfk/8mgjUwA2YKllxB5QUQ/L3hArAAHgKcBhBsGv0gcBP/PfaBawCc2ucKKi9AiE/Z/Ljbfh7gtz6b+rKbt3yFxEdyxY1HX3vjTRsfeecdPMDel99w2u5eyc5bSsQpm7sJHr/zcc/4Q/6Vjr7kxpuyi8fyTK7jX21/5D1nbfYlnsn7XEHlRfA6n82096X+caSP5JmmodvimfyVNy32s/yg8Jsi95IwBgGGvS+/5U9Re4+dj7vzSbwIzn/JjTdNpfw+yYO44ue2L9zztgASezyTIva4guBF4B+lqOjtebb7tg82n8Yz6WPvWNo5N/QAEs2wx7O9olx+xJ/9Yj3/gr0vvPFUV8qvAA8CQPzeduQ76bOZuGKfZ8r0PlcQvADNfOH+l9/ym3tffssfHNx+y+02H8kVzdbH6LP/YeCBonyOzVdn+BW2un7z2MffdgzzloABDC99tLX3UrwAXofv++wzW/T1F4DHAoD+tkW8pT72jiXPJLTHMwntcwWVF+wlzBU291saPujYJzzjB3kuxz7u1j8G/pgH2PmE235u7ytueQbmwQAteTHgz3g+VqvVuLm1+EnwKwEgnlaCN975mFt3eQDjfZ5J4T2uoPKCnQdWQAecBgJYCL5378tvfu3tj7/9/QXmmfzZxN7WzW9g8/IhPRhxRmZuc4ZnUolNni/tb212nwd+I664z8o32vyYO+7meXgfBEC23OcKKi9AEe+9+XG3/TyAv+vB873z+YmCzwEAve/BVzzoF/m4Z/wEwPkvvuXF9is/LXi4xBUG86LKBdLH8Gx930rj+RDaM1eI2OcKgheB3ufW1bGPv+1zgXt5JptXA/BnE7Xy88DDueLOgI9O8fpFelngqfyLVAEBE1ccH8M/7M9+sZ7n4vRvgb4Q9IWl09O4gsqLyN/yct3+/tkF91M2gAtbtzy6gwfzTM357jufcMdv80z7X37LwvzLJP/gOPqLS40/EGxjXnF/6+CLgY/lAXY+8fbfA36P50TlBWjp8lufTX0wD64nN6ab9/fOfjpih2cK85cAHZzkAcLcyTMdfMUtr5fmBl4EU5QPO/nJt+7uffktHwF8NwDyR+99xc2/vfNxt/8sz7T/VQ96TE75bqD7ssb3nviYW3cBKi+I9NMvt3ULkEDwXJ6w7me/AHA4DE/c7HsDAlDET+5/xc0/Zet6m3fnX2nn42/7nktffsubCt4RI9B3Xfjih77MyU9+2m0Abv41STcC1GyPBD4cIPhXEvwVrbz1qY98yh7A9Z96z1mhb+LZXtzWZwDvb3gq5lP5V/LIBxtu54qTtU4/9Ocf+HKdP5sATvNMtq7lCirP9Fj+Ife45Td4LgFOdE74VsQfbH3sbb8gYR7gtoOtj7l5++Dpst/V8CDgguHXd6b6yaxyvb/VXsOoJ/MOnkmql0z+Bs809ocTz3T8U267uP+VN71HZnwGz/SoR557C308P7n3Ffp07I8V3Ov013IF4v8Ggv8bCP5vIPi/geD/Bv4RRsHhE2VGc0QAAAAASUVORK5CYII=","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADHUlEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yn+SPXvqlHyz4LgDD+7zKX//1rfzHQ/wH+6uXfunja/gs4KN5Tl89g895mb/+613+4yD+A/3JS7/0exm+GjjO87cr+OhX+uu//h7+YyD+A/zRS7/0awu+CnhpXjR/bfiYV/nrv/5t/n0Q/w5/9NIv/WDBVwFvzb/NTxs+5lX++q9v5d8G8W/wVy/90scH+CjDZ/Pvtyv46h6+5mX++q93+ddB/Cv9yUu/9HsZPht4MP+xbhV89iv99V9/Dy86xIvoj176pV9b8FnAa/Of67cNn/Mqf/3Xv82/DPEv+KOXfukHCz4LeG/+a333DD7mZf76r3d5wRAvxJ+89Et/luGjgeP899gVfPUr/fVffw7PH+L5+JOXfum3NnwV8GD+Z7hV8DGv9Nd//dM8J8QD/OlLv/RLJ3wV8Nr8z/TbAR/zin/913/NFQQP0OCrgdfmf67XbvDVPBvB/24E/7sR/O9G8L8bwf9uBP+7EfzvRvC/G8H/bgT/uxH870bwvxvB/24E/7sR/O9G8L8bwf9uBP+7EfzvRvC/G8H/bgT/uxH870bwAAU+2vA7/A9l+J0CH82zIZ6PP3npl37rhK8WPIj/AQzPCPjoV/rrv/5pnhPihfijl37pzxZ8NHCM/x6XDF/9Kn/915/N84f4F/zRS7/0g4HPFrwX/4UM3zOHj36Zv/7rXV4wxIvoj176pV8b+GzBa/GfyPA7wGe/yl//9W/zL0P8K/3RS7/0ewOfLXgQ/4EMzwA++1X++q+/mxcd4t/gr176pY+v4KMFn8W/3yXDV8/hq1/mr/96l38dxL/DH730Sz9Y8NXAW/Fv8zOGj36Vv/7rW/m3QfwH+KOXfunXFnw18FK8aP7G8NGv8td//dv8+yD+A/3RS7/0ewu+GjjG83fJ8NGv8td//d38xyD4D/Qqf/3X3z2DBwNfw/P6mhk8+FX++q+/m/84iP8kf/TSL/1g4Lu54r1f5a//+lb+4/GPbcupsAW6i/QAAAAASUVORK5CYII=","data:image/png;base64,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","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAAeCAYAAABwmH1PAAACZUlEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1S/4b/KgT/7b33rwJ//da/NfC/Hf5JZP/lsDCH5b6HNu/eKX+G3+8yH+m9zyyX9rHkDw20Kfc+sXv8Rv858H8d/klk/+W/N8CH5b6HNu/eKX+G3+4yH+m9zyyX9rXgjBbwt9zq1f/BK/zX8cxH+TWz75b82LQPDbQp9z6xe/xG/z74f4b3LLJ/+t+VcQ/LbQ59z6xS/x2/zboVs++e8+i/8W/mz+DQS/LfQ5t37xS/w2/3rolk/+W/O/kOC3hT7n1i9+id/mRYdu+eS/Nf+LCX5b6HNu/eKX+G3+ZeiWT/5b83+A4LeFPufWL36J3+YFQ7d88t+a/0MEvy30Obd+8Uv8Ns8L3fLJf2v+DxL8ttDn3PrFL/HbPBu65ZP/1vwfJvhtoc+59Ytf4rcBdMsn/635f0Dw20KfU/n/QwCV/+MEvyP02bd+8Uv8NkDl/yjB7wh99q1f/BK/zbNR+T9G8DtCn33rF7/Eb/O8qPwfIfgdoc++9Ytf4rd5waj8Lyf4HaHPvvWLX+K3+ZdR+V9K8DtCn33rF7/Eb/Oio4I/h/8W+iz+DQS/I/TZt37xS/w2/3qI/ya3fPLfmn8Fwe8IffatX/wSv82/HZX/4QS/I/TZt37xS/w2/35U/ocS/I7QZ9/6xS/x2/zHofI/jOB3hD771i9+id/mPx6V/yEEvyP02bd+8Uv8Nv95qPw3E/yO0Gff+sUv8dv856Py30TwO0KffesXv8Rv81+HfwRpeo2OYCmIvwAAAABJRU5ErkJggg==","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAA4CAYAAACGwxqMAAAD20lEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/y7/T4137vBwd6LfBrGx4MvDbP6bcFt4J+O/HvPOa3v/tW/u0Q/0ZPeJ33eSvsjwZem3+d30b66kf/1nf9DP96iH+lx7/2e7+24KuAl+bf568NH/OY3/7u3+ZFh3gRPf213/v4Gj4L+Gj+Y331DD7nIb/93bv8yxAvgse/9ns/WPBTwEvzn+OvDW/zmN/+7lt54RD/gie99nu/dMJvAcf5z7Ub8DqP/O3v/mteMMQL8aTXfu+XTvgt4Dj/NXYDXueRv/3df83zh3gBnv7a7318DX8FPJj/WrfO4GUe8tvfvcvzIngB1vBbwIP5r/fgNfwUzx/B8/H4137vzwZemv8+r/34137vz+Z5IZ7Lk177vV864a/4HyDgZR7529/91zwbwXNJ+Cr+h0j4Kp4TwQM88bXf+62B1+Z/jtd+4mu/91vzbAQPYPgq/ocxfBTPRvBMj3/t935t4MH8z/Paj3/t935triB4JsFH8z+U4KO5AgE8/bXf+/gaLvI/2AxOPOS3v3s3AFbw1vwPt4K3BggAwVvzP5zgrQEqV7wW//O9FoCe9Nrv/dIJf8X/AgEvEw1emv8lGrx0BR7M/x4PrsBr87/Hawf/u1AFL8X/EoKXqsBx/vc4HvzvQvC/C8H/LlT+d7kUht/hfwnDXwf/uxDAb/O/x29X4Fb+97g1Cvw1/0sU+GsBPOG133sXOMb/bJce/dvffTy44rf5n++3AQLA8NP8D2f4aYAAmMNP8z/cHH4aIAAe8tvfvQv8DP9z/cxDfvu7dwGCZzJ8Nf9DGb6aKxAP8ITXfu+/Bl6K/0EMv/OY3/7u1+YKggcQfDb/wwR8Nc+GeC6Pf+33/m3Ba/E/gOF3HvPb3/3aPBvBcynw0fwPUeCjeU4Ez+WRv/3df234HP6bGT7nkb/93X/Nc0K8AI9/7ff+bcFr8d/A8DuP+e3vfm2eF8ELMIe3NjyD/2KGZ8zhrXn+CF6Ah/z2d+8WeGvgEv91LhV464f89nfv8vwh/gVPeu33fumE3waO8Z/rUsBrP/K3v/uvecEI/gWP/O3v/mvDSwN/w3+evzG89CN/+7v/mheO4EXwmN/+7ltn8NrA1/Af72tm8NqP+e3vvpV/GeJf6fGv/d6vLfhq4KX49/kbw0c/5re/+7d50SH+jZ742u/91gkfLXgt/nV+RvDdj/rt7/5p/vUQ/06Pf+33fjDw2sBrAw8WvBYPYPgd4Fbgt4Hffsxvf/et/Nvxj4i13vwKRarXAAAAAElFTkSuQmCC","data:image/png;base64,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","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAYCAYAAACbU/80AAADd0lEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yr3TTw1/ltVR03C1fmgdQib928+4dT/mj3+FFh/gXPPilX/t4Hq7fK+23Bl6bF81vh/TTsTn7nlv/+rd3ecEQL8CDH/3KD26Nz7J5b/4dJL67FD7n1if88a08L8TzcdPDX/mzgM/m+Xjsg8XOJrzKi4sH+qO/N3uH8LhbzQvw2Xc85Y8/h+eEeIAHv/RrH58OVj8FvDYP8MovJt7hdYI3eiVxbJMX6tIh/MqfmB/7reSP/8E8l9+uW/O3ufWvf3uXKxDP9OCXfu3j0+H6t7Bfmmd67IPFZ79v8CovLv4t/ujvzWd/Z/K4W82zSH9dN2evc+tf//YuQOGZtrev+ybMG/NMH/NOwTd+XOHma8S/1c3XiPd4owDgj//BPNN1Hqfr9i7c8TMABeCmh7/yawNfzTN9xYcX3v8tgv8or/Li4qYz4lf/1DzTS++cvOl39i7ccWtwxWfxTG/4isE7vq74j/aOryve8BWDB/gsAD340a/84Gni6TzT339f5dgm/yluvw9e9YMn7lcrD4nWeG2e6Q1fMTi2yX+am6+BN3zF4H6t8dph82Ce6cUewn+6F3sIz2Lz4OC/FyFxK8/0D0/nP90/PJ1nkbg1SuG3eaZf/dPk9vv4T3P7ffCrf5rcrxR+O259wh/fCvwOz/Q535X8Z/mc70oe4HdufcIf3xpc8dk806/8SfKjv2n+o/3ob5pf+ZPkAT4boADsXbjj1mOnbnoI8NIAv/qnRsCrvLj4j/BVP5J8zncl95P4njue8sdfDVB4ppO3PPy3c5zeBLgO4I/+wfzqn5qH3Shuvkb8W/zR35sP+JLkZ3/fPIv4m7o5f+fde25dAYgHePBLv/bx6WD108Br8QCv8uLiHV4neMNXFMc2eaEuHcKv/qn5sd9K/ujvzQMJ/UzZmr33rX/927tcgXg+bnr4K3828Fk8HzdfI266Bl7lxcQD/dE/mDvug9vvMy/A59zxlD/+bJ4T4gV48KNf+cGt8dk278W/g8T3lMJn3/qEP76V54X4Fzz4pV/7eB6s3zvxWwOvxYvmdwL9dGzNvvvWv/7tXV4wxL/STQ9/5ddW6LjTL80DKPTXTu/e8ZQ//m1edPwjGdMWW1e+kBgAAAAASUVORK5CYII=","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABXUlEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yfHz0a//Wa4PeC3ht4MFccSvw2+Dv+erffp3f5jkhHuCjX/u3Xhr0VcBr88L9Nvhjvvq3X+evuQLxTB/92r/10qDfAo7zotkFv85X//br/DWAAD76tX/rpUG/BRznX2cX/Dpf/duv89cBAPoq4Dj/esdBXwWgj37t33pt0G/x7+LXqcB78+/33hX0Wvy76bUq8GD+/R4c/McgwM/g383PCOC3+ff77QC+m3+/7xbAR7/2b/026LX4N/HvfPVvv85rB1d8NPgS/2q+BHw0gHimj37t33pp4LdBx3iR+BLw2l/926/z1wDBM331b7/OXwOvDf4d/kX+HeC1v/q3X+evuQLxfHz0a//WawPvDbw26EFc5mcAvw1891f/9uv8Ns+JfwRQwUyXV81bigAAAABJRU5ErkJggg==","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACjklEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/y73DzI175vQFuf/Iffzf/NhT+jW5+xCu/t813AW997NRNz9i7cMdf869H4d/g5ke88nvbfBfP9tbHTt30jL0Ld/w1/zqIf6WbH/HK723zXTwfCr3N7U/6o5/mRYd4Lg9+6dc+Ph2sX4rnUrdmf8Ph8OBm/5bxcZ4Pod0ivQ6b/a3TwfqleC51a/Y3t/71b+/ybFSey3Swemngt3gu08GKf4nx8cn+Kw5WPD/Twep1gN/m2Qj+exH89yL470Xw34vgudTKrfwnqVvzv+Y5ETy3Fsf5z3I4PJjnRPAANz/ild+72b/Ff5Jm/9bNj3yVt+bZKDzTzY945fe2+S5gzn+eOeadj5266Rl7F+74a4ACcPMjXvm9bb6L/zpvfezUTc/Yu3DHX+vmR7zye9t8F/8NJN4n+O9F2btwx18fO3XTM4C35r+QxPvc/uQ//u4CsHfhjr8+duqmZwBvzX8Bife5/cl//N0AhWfau3DHXx87ffPfyLwJMOc/geCSQu9y+5P/+Ie5AvFcHvyIV33pyflX/Ceoipe59cl/+Nc8G8FzK7nLf5bN/laeE8FzmSYezH+S6WD10jwngv9eBP+9CP57Efz3ovJc6tb8r6eD1evwXOrW/K85HB7cnL9tOMbzIbhUFK/NZn/rdLB6aZ5L3Zr/Nc8J8a908yNf5a2d/imeD4Xe5vYn/dFP86Kj8K+0d/6OJxw7ddMzgLfmASTe5/Yn//EP869D4d9g78Idf33s1E3PAN4aQOJ9bn/yH383/3qIf4ebH/HK7w1w+5P/+Lv5t+EfATTcw1OBjleUAAAAAElFTkSuQmCC","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAMCAYAAAD1XTohAAAAvUlEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a8CnPmub31pi88C3pqrXhQ/LfM5Z9/nA/9aZ77rW1/a4reA41z1r7Er8zrV8NnAca761zpu+OyKeCuu+rcRbxVc9e9BcNW/B8FV/x4EV/17EFz170Fgfoar/m3Mz4TgszGXuOpfx1wSfHacfZ8P/GvBa2N+hqteNOZnBK999n0+8K//Eay1IoKehu9EAAAAAElFTkSuQmCC","data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAqCAYAAADbCvnoAAABrElEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a/yXB786Fd+cGt8ltFLY780/xmkvxb+61L4nFuf8Me38myIZ3rwS7/28Xa4/izbH81/IUlfffuT/+hjuAIBPPilX/v4dLj+LeyX5r+D9Nd3PPmPXgYgAKbD9WdjvzT/XeyXvukRr/LVAHrwo1/5wdPE0/kfoFYeUrZP3PTVwEvzP0BaCqOX4n+O16rYL83/FPZLB/+zEPzPQvA/C8H/LAT/sxD8z0LwPwvB/ywE/7MQ/M9C8D8Lwf8sBP+zEPzPQvA/C8H/LAT/sxD8z0LwPwvB/ywE/7MQ/M9C8D8Lwf8sBP+zEPzPQvA/C4H4G/6nEH8Tgr/mfwz9th786Fd+8DTxdP4HqJWHlN1zd+zunLr5BPDK/HeSvua2J/3xDwdA3Zx9NuJv+O8i/uaOJ//RRwMUgN17bl3tXbjjm3dO3XwCeGX+K0lfc8eT//ituYLCA+xduOOXT15z0/ekJcQCuI7/DOJvkH6kVt7ltif98Q/zbPwjFfJiEZ1VXOgAAAAASUVORK5CYII="],
+  sets: [],
+  sounds: [],
+  rules: [],
+  commands: {},
+  numbers: {},
+  defaults: {"spin":[2,0],"bounce":[60,0.8],"swing":[120,2],"rise":[60,2],"drift":[60,0],"shake":[3,0],"pulse":[25,1],"blink":[1,0],"fade":[2,0],"expire":[0.5,0],"mouse":[200,0],"keys":[160,0],"gravity":[900,420],"drag":[0,0],"ricochet":[220,50],"roll":[0,0],"camera":[0,0],"scenery":[40,1],"solid":[0,0]},
+  scenes: [[{"o":[["i",0],["m",[1,23,19],3,{"p":[62,58],"box":[24,20,76,76],"l":[["spin",8,0]],"n":"Güneş","r":0}],["m",[2,130,46],4,{"p":[185,64],"box":[130,46,110,36],"l":[["drift",40,0]],"n":"Bulut","r":0}],["m",[3,380,92],5,{"p":[420,106],"box":[380,92,80,28],"l":[["drift",22,0]],"n":"Bulut","r":0}],["m",[4,184,8],6,{"p":[280,23.6],"box":[184.905,8,190.18999,31.2],"l":[["fade",3,0]],"n":"PisiAnimasyon","r":0}],["m",[5,457,120],7,{"p":[500,130.8],"box":[457.052,120,85.89601,21.6],"l":[["expire",3,0]],"n":"Merhaba!","r":0}],["m",[6,475,150],8,{"p":[500,163.2],"box":[475.998,150,48.004,26.400002],"l":[["blink",1,0]],"n":"Bak!","r":0}],["m",[7,34,236],9,{"p":[58,260],"box":[34,236,48,48],"l":[["shake",3,0]],"n":"Zil","r":0}],["m",[8,120,244],10,{"p":[148,272],"box":[120,244,56,56],"l":[["bounce",110,0.9]],"n":"Top","r":1}],["m",[9,200,150],11,{"p":[230,165],"box":[200,150,60,30],"l":[["swing",120,2]],"n":"Ok","r":0}],["m",[10,420,190],12,{"p":[442,218],"box":[420,190,44,56],"l":[["rise",50,2.4]],"n":"Balon","r":1}],["m",[11,479,229],13,{"p":[510,260],"box":[480,230,60,60],"l":[["pulse",25,1],["drag",0,0]],"n":"Yıldız","r":0}],["m",[12,298,108],14,{"p":[314,120],"box":[300,110,28,20],"l":[["mouse",220,0]],"n":"Arı","r":1}],["m",[13,250,70],15,{"p":[259,79],"box":[250,70,18,18],"l":[["ricochet",170,35]],"n":"Bilye","r":1}],["m",[14,200,268],16,{"p":[216,284],"box":[200,268,32,32],"l":[["keys",160,0],["roll",0,0]],"n":"Tekerlek","r":0}],["m",[15,330,240],17,{"p":[370,246],"box":[330,240,80,12],"l":[["solid",0,0]],"n":"Çıkıntı","r":0}],["m",[16,260,258],18,{"p":[278,279],"box":[260,258,36,42],"l":[["keys",160,0],["gravity",900,420]],"n":"Kutu","r":0}]],"a":"","s":-1}]]
+};
+var canvas = document.getElementById("stage"), stage = canvas.getContext("2d");
+var scene = 0, frame = 0, playing = true, depth = 0;
+var clipFrames = {}, buttons = [], hover = null, pressed = false, loaded = 0;
+// For each object with behaviors: how long it has been there (n, in frames), how far the viewer
+// has moved it (x, y), how fast it is falling (vy) and whether it stands on the ground.
+var actors = {}, keys = {}, mouse = null, grips = [], dragging = null;
+// For the rules: the numbers as they stand, whether everything has been stopped, how long the film
+// has run, and what each rule last saw, so that it is followed when a thing happens and not while it lasts.
+var numbers = {}, frozen = false, ticks = 0, seen = {};
+// The film's frames go at the film's own rate, but what behaviors and rules move is moved every time the
+// screen is drawn, which is smoother. pace is how much of a film frame has gone by since the last drawing,
+// owed how much of one is still to be shown, and last when the screen was last drawn.
+var pace = 1, owed = 0, last = 0;
+// The copies rules have made, each with the scene it was made in; and what is solid on this frame.
+var clones = [], made = 0, walls = [];
+// The steps that wait their turn: each with the frame it is to go on at.
+var waiting = [];
+// The values of the command whose steps are being taken, by name: a number, or the name of an object.
+var given = null;
+var sounds = movie.sounds.map(function (source) { return new Audio(source); });
+var images = movie.pictures.map(function (source) {
+  var image = new Image();
+  image.onload = function () { loaded += 1; if (loaded === movie.pictures.length) start(); };
+  image.src = source;
+  return image;
+});
+if (movie.pictures.length === 0) start();
+
+// Goes to a frame of a scene, both counted from 0, playing on from there or stopping.
+function go(toScene, toFrame, play) {
+  if (toScene < 0 || toScene >= movie.scenes.length) return;
+  var other = toScene !== scene;
+  // Each scene is looked at from where it was drawn.
+  if (other) { camX = 0; camKey = null; camRule = null; }
+  scene = toScene;
+  frame = Math.max(0, Math.min(toFrame, movie.scenes[scene].length - 1));
+  playing = play;
+  enter();
+  // A scene that starts has its own rules to follow: hiding what copies are made from, setting a clock.
+  if (other) happen("scene-start", function () { return true; });
+}
+// Does what an action says. Frames and scenes are written counted from 1.
+function act(action) {
+  if (!action) return;
+  if (action === "action:stop") playing = false;
+  else if (action === "action:play") playing = true;
+  else if (action.indexOf("action:goto-play:") === 0) go(scene, Number(action.slice(17)) - 1, true);
+  else if (action.indexOf("action:goto-stop:") === 0) go(scene, Number(action.slice(17)) - 1, false);
+  else if (action.indexOf("action:scene:") === 0) go(Number(action.slice(13)) - 1, 0, true);
+  else if (action.indexOf("action:") !== 0) window.open(action, "_blank");
+}
+// On reaching a frame its sound starts and its action is done. An action that leads
+// back to itself is followed only a few times, so that it cannot hold the page up.
+function enter() {
+  var now = movie.scenes[scene][frame];
+  if (now.s >= 0 && sounds[now.s]) { try { sounds[now.s].currentTime = 0; sounds[now.s].play(); } catch (error) {} }
+  depth += 1;
+  if (depth < 8) act(now.a);
+}
+// The behaviors an op carries, and the number its object is known by.
+function behaviorsOf(op) { return op[0] === "m" || op[0] === "t" ? op[3] : op[0] === "c" ? op[5] : op[0] === "b" ? op[7] : null; }
+function keyOf(op) { return op[0] === "m" ? op[2] : op[0] === "t" ? op[1] : op[4]; }
+function actor(key) { return actors[key] || (actors[key] = { n: 0, x: 0, y: 0, vy: 0, ground: false, rate: 1 }); }
+// What is on the stage now: the frame's own, and the copies made in this scene.
+function ops() {
+  var list = movie.scenes[scene][frame].o;
+  if (!clones.length) return list;
+  return list.concat(clones.filter(function (c) { return c.scene === scene; }).map(function (c) { return c.op; }));
+}
+// The solid thing an object's box is inside of, if there is one.
+function blocked(key, box, a) {
+  var x = box[0] + a.x, y = box[1] + a.y;
+  for (var i = 0; i < walls.length; i += 1) {
+    var w = walls[i].box;
+    if (walls[i].key !== key && x < w[0] + w[2] && w[0] < x + box[2] && y < w[1] + w[3] && w[1] < y + box[3]) return w;
+  }
+  return null;
+}
+function span(seconds) { return Math.abs(seconds) < 0.01 ? 0.01 : seconds; }
+function wrapped(at, size, room) { var m = room + size; return (((at + size) % m) + m) % m - size; }
+// The behaviors an object has now: those it was drawn with, less what rules have taken from it (off),
+// and those rules have given it (extra), each with the moment it was given at as its fourth part.
+function acts(key, b) {
+  var a = actors[key];
+  if (!a || (!a.off && !a.extra)) return b.l;
+  var list = a.off ? b.l.filter(function (l) { return !a.off[l[0]]; }) : b.l;
+  return a.extra ? list.concat(a.extra) : list;
+}
+function has(key, b, kind) { return acts(key, b).some(function (l) { return l[0] === kind; }); }
+// The view: how far it has gone along the stage (camX), the object it goes along with (camKey), and what a
+// rule has said about it (camRule): the name of an object to follow, or false to stand still.
+var camX = 0, camKey = null, camRule = null;
+// How far an object slides because the view has moved: everything goes the other way by as much as the
+// view has gone, what slides like scenery by a part of that, and a text that shows a number not at all.
+function slide(op, key, b) {
+  if (!camX || op[0] === "t") return 0;
+  var far = acts(key, b).filter(function (l) { return l[0] === "scenery"; })[0];
+  return far ? -camX * far[1] / 100 : -camX;
+}
+// The same, with what comes back in at the other side put where it has come back in. `x` is where the object is.
+function seen2(op, key, b, x) {
+  var s = slide(op, key, b);
+  var far = acts(key, b).filter(function (l) { return l[0] === "scenery"; })[0];
+  if (far && far[2]) s += wrapped(x + s, b.box[2], movie.width) - (x + s);
+  return s;
+}
+// Moves the view to where what it follows has gone. It keeps the object where it was drawn on the screen.
+function lens() {
+  if (camRule === false) return;
+  var list = ops(), found = null;
+  for (var i = 0; i < list.length && !found; i += 1) {
+    var b = behaviorsOf(list[i]), key = keyOf(list[i]);
+    if (!b || actor(key).hidden) continue;
+    if (camRule ? b.n === camRule.name : has(key, b, "camera")) found = list[i];
+  }
+  if (!found) { camKey = null; return; }
+  var dx = moved(keyOf(found), behaviorsOf(found)).dx;
+  // A rule takes the view over from wherever it is, without a leap.
+  if (camRule && (camRule.base === undefined || camRule.key !== keyOf(found))) { camRule.base = dx - camX; camRule.key = keyOf(found); }
+  camKey = keyOf(found);
+  camX = dx - (camRule ? camRule.base : 0);
+}
+// The op of the object known by a number, if it is on the stage now.
+function opOf(key) {
+  var list = ops();
+  for (var i = 0; i < list.length; i += 1) if (keyOf(list[i]) === key && behaviorsOf(list[i])) return list[i];
+  return null;
+}
+// How deep one object tied to another is being followed: a ring of them is not gone round for ever.
+var tied = 0;
+// Where the middle of the first object of a name is now, if it is on the stage and not hidden.
+function middleOf(name) {
+  var list = ops();
+  for (var i = 0; i < list.length; i += 1) {
+    var b = behaviorsOf(list[i]);
+    if (!b || b.n !== name || actor(keyOf(list[i])).hidden) continue;
+    var m = moved(keyOf(list[i]), b);
+    return { x: b.box[0] + b.box[2] / 2 + m.dx, y: b.box[1] + b.box[3] / 2 + m.dy };
+  }
+  return null;
+}
+// What its behaviors have done to an object by now: moved it (dx, dy), turned it (angle) and
+// resized it (scale) around its point, and let it through by a part (alpha). The first nine
+// kinds follow the same rules as playing inside PisiAnimasyon does.
+function moved(key, b) {
+  var a = actor(key), t = a.n / movie.fps, box = b.box, TAU = Math.PI * 2;
+  // What rules have done to it comes first: turned it, resized it, let it through by a part.
+  var m = { dx: a.x, dy: a.y, angle: a.turn || 0, scale: a.size === undefined ? 1 : a.size, alpha: a.alpha === undefined ? 1 : a.alpha };
+  // What is tied to another object goes wherever that one has gone since it was tied.
+  if (a.parent && tied < 8) {
+    var held = opOf(a.parent.key);
+    if (held) {
+      tied += 1;
+      var hm = moved(a.parent.key, behaviorsOf(held));
+      tied -= 1;
+      m.dx += hm.dx - a.parent.dx; m.dy += hm.dy - a.parent.dy;
+    }
+  }
+  var whole = t;
+  acts(key, b).forEach(function (l) {
+    var k = l[0], p = l[1], q = l[2];
+    // A behavior a rule gave starts when it was given, not when the object came on.
+    t = l[3] ? whole - l[3] / movie.fps : whole;
+    if (k === "spin") m.angle += TAU * t / span(p) * (q ? -1 : 1);
+    else if (k === "bounce") m.dy -= p * Math.abs(Math.sin(Math.PI * t / span(q)));
+    else if (k === "swing") m.dx += p * (1 - Math.cos(TAU * t / span(q))) / 2;
+    else if (k === "rise") m.dy -= p * (1 - Math.cos(TAU * t / span(q))) / 2;
+    else if (k === "drift") {
+      var turn = q * Math.PI / 180;
+      m.dx += wrapped(box[0] + p * Math.cos(turn) * t, box[2], movie.width) - box[0];
+      m.dy += wrapped(box[1] - p * Math.sin(turn) * t, box[3], movie.height) - box[1];
+    }
+    else if (k === "shake") { var beat = Math.floor(a.n); m.dx += p * Math.sin(beat * 12.9898); m.dy += p * Math.cos(beat * 78.233); }
+    else if (k === "pulse") m.scale *= 1 + p / 100 * (1 - Math.cos(TAU * t / span(q))) / 2;
+    else if (k === "blink") { var one = Math.abs(span(p)); if (((t % one) + one) % one >= one / 2) m.alpha = 0; }
+    else if (k === "fade") m.alpha *= (1 + Math.cos(TAU * t / span(p))) / 2;
+    else if (k === "expire") { if (t >= p) m.alpha = 0; }
+    // A wheel has turned by the way it has gone, over its own radius.
+    else if (k === "roll") m.angle += (a.rolled || 0) / Math.max(box[3] / 2, 1);
+  });
+  return m;
+}
+// One frame's worth of what the viewer does to an object: the mouse draws it on, the arrow
+// keys walk it, the ground pulls it down and Up or Space makes it jump.
+function step(key, b, op) {
+  // An object a rule has made faster does everything faster: its own time runs quicker.
+  var a = actor(key), dt = a.rate * pace / movie.fps, box = b.box;
+  a.n += a.rate * pace;
+  // What a rule keeps spinning turns on by so much of a turn each time.
+  if (a.whirl) a.turn = (a.turn || 0) + Math.PI * 2 * a.whirl * dt;
+  // What is to disappear after a while is gone when its time is up; a copy is gone for good.
+  var list = acts(key, b);
+  if (list.some(function (l) { return l[0] === "expire" && (a.n - (l[3] || 0)) / movie.fps >= l[1]; })) {
+    a.hidden = true;
+    clones = clones.filter(function (c) { return keyOf(c.op) !== key; });
+    return;
+  }
+  if (dragging && dragging.key === key) return;
+  // The edges of the stage are where the screen ends: with the view moved, so are they.
+  var falls = has(key, b, "gravity"), fromX = a.x, fromY = a.y, flies = false, s = op ? slide(op, key, b) : 0;
+  list.forEach(function (l) {
+    var k = l[0], p = l[1], q = l[2];
+    if (k === "mouse" && mouse) {
+      var dx = mouse.x - s - (box[0] + box[2] / 2 + a.x), dy = mouse.y - (box[1] + box[3] / 2 + a.y);
+      var far = Math.sqrt(dx * dx + dy * dy), go = p <= 0 ? far : Math.min(far, p * dt);
+      if (far > 0.5) { a.x += dx / far * go; a.y += dy / far * go; }
+    } else if (k === "keys") {
+      if (keys.ArrowLeft) a.x -= p * dt;
+      if (keys.ArrowRight) a.x += p * dt;
+      if (!falls && keys.ArrowUp) a.y -= p * dt;
+      if (!falls && keys.ArrowDown) a.y += p * dt;
+      // What the view follows is never at the side of the screen: it walks on as far as it likes.
+      if (key !== camKey) a.x = Math.max(-box[0] - s, Math.min(a.x, movie.width - box[0] - box[2] - s));
+      a.y = Math.max(-box[1], Math.min(a.y, movie.height - box[1] - box[3]));
+    } else if (k === "gravity") {
+      if (a.ground && q > 0 && (keys.ArrowUp || keys[" "])) { a.vy = -q; a.ground = false; }
+      a.vy += p * dt;
+      a.y += a.vy * dt;
+      var floor = movie.height - box[1] - box[3];
+      if (a.y >= floor) { a.y = floor; a.vy = 0; a.ground = true; } else a.ground = false;
+    } else if (k === "ricochet") {
+      // It flies straight on, at its own speed, and comes back from every edge of the stage as a ball does.
+      // A speed that has been changed keeps the way it was going.
+      var pace2 = a.rx === undefined ? 0 : Math.sqrt(a.rx * a.rx + a.ry * a.ry);
+      if (a.rx === undefined || pace2 < 0.001) { var way = q * Math.PI / 180; a.rx = p * Math.cos(way); a.ry = -p * Math.sin(way); }
+      else if (Math.abs(pace2 - Math.abs(p)) > 0.001) { a.rx *= Math.abs(p) / pace2; a.ry *= Math.abs(p) / pace2; }
+      flies = true;
+      a.x += a.rx * dt; a.y += a.ry * dt;
+      var lowX = -box[0] - s, highX = movie.width - box[0] - box[2] - s, lowY = -box[1], highY = movie.height - box[1] - box[3];
+      if (a.x < lowX) { a.x = lowX; a.rx = Math.abs(a.rx); } else if (a.x > highX) { a.x = highX; a.rx = -Math.abs(a.rx); }
+      if (a.y < lowY) { a.y = lowY; a.ry = Math.abs(a.ry); } else if (a.y > highY) { a.y = highY; a.ry = -Math.abs(a.ry); }
+    }
+  });
+  // What a rule has set going gathers speed, or loses it, towards the speed it is to have.
+  if (a.go) {
+    var g = a.go, sx = g.tx - g.vx, sy = g.ty - g.vy, short = Math.sqrt(sx * sx + sy * sy), most = g.acc * dt;
+    if (short <= most || !(short > 0)) { g.vx = g.tx; g.vy = g.ty; } else { g.vx += sx / short * most; g.vy += sy / short * most; }
+    a.x += g.vx * dt; a.y += g.vy * dt;
+    if (!g.tx && !g.ty && !g.vx && !g.vy) a.go = null;
+  }
+  // What a rule has sent after another object goes straight towards its middle, and stops on reaching it.
+  if (a.chase) {
+    var goal = middleOf(a.chase.name);
+    if (goal) {
+      var cx = goal.x - (box[0] + box[2] / 2 + a.x), cy = goal.y - (box[1] + box[3] / 2 + a.y);
+      var gap = Math.sqrt(cx * cx + cy * cy), reach = Math.min(gap, a.chase.speed * dt);
+      if (gap > 0.5) { a.x += cx / gap * reach; a.y += cy / gap * reach; }
+    }
+  }
+  // What is solid stops it: first sideways, then up or down, where it lands on top or bumps its head.
+  if (walls.length && (a.x !== fromX || a.y !== fromY)) {
+    var toX = a.x, toY = a.y, w;
+    a.y = fromY;
+    if ((w = blocked(key, box, a))) {
+      a.x = toX > fromX ? w[0] - box[2] - box[0] : toX < fromX ? w[0] + w[2] - box[0] : fromX;
+      // What bounces off the edges bounces off what is solid too.
+      if (flies) a.rx = toX > fromX ? -Math.abs(a.rx) : Math.abs(a.rx);
+    }
+    a.y = toY;
+    if ((w = blocked(key, box, a))) {
+      if (toY > fromY) { a.y = w[1] - box[3] - box[1]; a.ground = true; } else a.y = w[1] + w[3] - box[1];
+      a.vy = 0;
+      if (flies) a.ry = toY > fromY ? -Math.abs(a.ry) : Math.abs(a.ry);
+    }
+  }
+  rolled(key, b, a);
+}
+// Counts how far along the ground a wheel has gone since it was last looked at. A leap from one side of
+// the stage to the other, as Keep Going makes, is not rolled.
+function rolled(key, b, a) {
+  if (!has(key, b, "roll")) return;
+  var here = moved(key, b).dx;
+  if (a.at !== undefined && Math.abs(here - a.at) < movie.width / 2) a.rolled = (a.rolled || 0) + here - a.at;
+  a.at = here;
+}
+// Sets the stage to draw an object as its behaviors have it.
+function place(m, b) {
+  var cos = Math.cos(m.angle) * m.scale, sin = Math.sin(m.angle) * m.scale, px = b.p[0], py = b.p[1];
+  stage.setTransform(cos, sin, -sin, cos, px + m.dx - (cos * px - sin * py), py + m.dy - (sin * px + cos * py));
+}
+// The named objects of the frame on show that are not hidden, each with its box as it stands now.
+function cast() {
+  var list = [];
+  ops().forEach(function (op) {
+    var b = behaviorsOf(op);
+    if (!b || !b.n || actor(keyOf(op)).hidden) return;
+    var m = moved(keyOf(op), b);
+    // sx is how far along it is drawn from where it is: the view may have moved.
+    list.push({ key: keyOf(op), name: b.n, b: b, box: [b.box[0] + m.dx, b.box[1] + m.dy, b.box[2], b.box[3]], s: slide(op, keyOf(op), b), sx: seen2(op, keyOf(op), b, b.box[0] + m.dx) });
+  });
+  return list;
+}
+// A player's box as it is on the screen.
+function shown(p) { return [p.box[0] + p.sx, p.box[1], p.box[2], p.box[3]]; }
+// Whether two objects touch. Boxes that lie against each other touch, so that what stands on a
+// thing touches it; a round object is taken by its outline and not by the corners of its box.
+function meets(p, q) {
+  var a = p.box, b = q.box;
+  if (!(a[0] <= b[0] + b[2] + 1 && b[0] <= a[0] + a[2] + 1 && a[1] <= b[1] + b[3] + 1 && b[1] <= a[1] + a[3] + 1)) return false;
+  if (!p.b.r && !q.b.r) return true;
+  var ax = a[0] + a[2] / 2, ay = a[1] + a[3] / 2, bx = b[0] + b[2] / 2, by = b[1] + b[3] / 2, dx, dy;
+  if (p.b.r && q.b.r) {
+    dx = (ax - bx) / (a[2] / 2 + b[2] / 2 + 1); dy = (ay - by) / (a[3] / 2 + b[3] / 2 + 1);
+    return dx * dx + dy * dy <= 1;
+  }
+  // One is round: the point of the other's box nearest to its middle must be inside it.
+  var round = p.b.r ? a : b, box = p.b.r ? b : a, cx = round[0] + round[2] / 2, cy = round[1] + round[3] / 2;
+  dx = (Math.max(box[0], Math.min(cx, box[0] + box[2])) - cx) / (round[2] / 2 + 1);
+  dy = (Math.max(box[1], Math.min(cy, box[1] + box[3])) - cy) / (round[3] / 2 + 1);
+  return dx * dx + dy * dy <= 1;
+}
+function startNumbers() {
+  numbers = {};
+  Object.keys(movie.numbers).forEach(function (name) { numbers[name] = movie.numbers[name]; });
+}
+// Does one step of a rule. `who` says which objects the event was about, by name, so that
+// "hide Apple" after "Apple touches Basket" hides that apple and not every apple.
+// Works out a sum: numbers by name, an object's place as Name.x and Name.y, a number at random as
+// random(from, to), the four signs and brackets. What it cannot read counts as nothing.
+function sum(text, who, players) {
+  var at = 0;
+  function skip() { while (at < text.length && /\s/.test(text[at])) at += 1; }
+  function sign(c) { skip(); if (text[at] === c) { at += 1; return true; } return false; }
+  function place(name, side) {
+    if (given && typeof given[name] === "string") name = given[name];
+    var p = players.filter(function (p) { return p.name === name && (who[name] === undefined || who[name] === p.key); })[0];
+    return p ? (side === "x" ? p.box[0] : p.box[1]) : 0;
+  }
+  function part() {
+    if (sign("-")) return -part();
+    if (sign("(")) { var inner = total(); sign(")"); return inner; }
+    var m = /^(\d+\.?\d*|\.\d+)/.exec(text.slice(at));
+    if (m) { at += m[0].length; return parseFloat(m[0]); }
+    var name;
+    if (text[at] === '"') { var end = text.indexOf('"', at + 1); if (end < 0) end = text.length; name = text.slice(at + 1, end); at = end + 1; }
+    else { m = /^[^\s+\-*\/().,"]+/.exec(text.slice(at)); if (!m) { at = text.length; return 0; } name = m[0]; at += name.length; }
+    if ((name === "random" || name === "rastgele") && sign("(")) {
+      var from = total(); sign(","); var to = total(); sign(")");
+      return Math.floor(Math.min(from, to) + Math.random() * (Math.abs(to - from) + 1));
+    }
+    if (sign(".")) { skip(); var side = text[at]; at += 1; return place(name, side); }
+    return valueOf(name);
+  }
+  function term() {
+    var v = part();
+    for (;;) { if (sign("*")) v *= part(); else if (sign("/")) { var by = part(); v = by ? v / by : 0; } else return v; }
+  }
+  function total() {
+    var v = term();
+    for (;;) { if (sign("+")) v += term(); else if (sign("-")) v -= term(); else return v; }
+  }
+  return total();
+}
+function amount(value, who, players) { return typeof value === "string" ? sum(value, who, players) : value; }
+// A number by name: a value of the command being done, if it has one of that name, or a number of the film.
+function valueOf(name) { return given && typeof given[name] === "number" ? given[name] : (numbers[name] || 0); }
+// The name a step means: where a command was given the name of an object, the object it was given.
+function named(name) { return given && typeof given[name] === "string" ? given[name] : name; }
+function take(step, who, players) {
+  var k = step[0], name = named(step[1]), x = amount(step[2], who, players), y = amount(step[3], who, players);
+  var meant = function (p, name) { return p.name === name && (who[name] === undefined || who[name] === p.key); };
+  var them = players.filter(function (p) { return meant(p, name); });
+  if (k === "show") {
+    // What is hidden is not among the players: it is looked for on the stage itself.
+    ops().forEach(function (op) { var b = behaviorsOf(op); if (b && b.n === name) actor(keyOf(op)).hidden = false; });
+  }
+  if (k === "spawn" && clones.length < 300) {
+    // The copy is made from the object as it was drawn, hidden or not, and put where the other object is now.
+    var source = null;
+    movie.scenes[scene][frame].o.forEach(function (op) { var b = behaviorsOf(op); if (!source && b && b.n === name && (op[0] === "m" || op[0] === "c")) source = op; });
+    // One copy for each object of the second name that is meant: "a shot at Soldier" gives every soldier a shot.
+    var places = players.filter(function (p) { return meant(p, named(step[4])); });
+    if (source) places.forEach(function (at) {
+      if (clones.length >= 300) return;
+      var sb = behaviorsOf(source);
+      var ox = at.box[0] + at.box[2] / 2 - (sb.box[0] + sb.box[2] / 2), oy = at.box[1] + at.box[3] / 2 - (sb.box[1] + sb.box[3] / 2);
+      var nb = { p: [sb.p[0] + ox, sb.p[1] + oy], box: [sb.box[0] + ox, sb.box[1] + oy, sb.box[2], sb.box[3]], l: sb.l, n: sb.n, r: sb.r };
+      made += 1;
+      var copy = source[0] === "m"
+        ? ["m", [source[1][0], source[1][1] + ox, source[1][2] + oy], "k" + made, nb]
+        : ["c", source[1], [source[2][0], source[2][1], source[2][2], source[2][3], source[2][4] + ox, source[2][5] + oy], source[3], "k" + made, nb];
+      clones.push({ scene: scene, op: copy });
+    });
+  }
+  them.forEach(function (p) {
+    var a = actor(p.key), box = p.b.box;
+    if (k === "move") { a.x += x; a.y += y; }
+    else if (k === "goto") { a.x = x - box[0]; a.y = y - box[1]; a.vy = 0; }
+    else if (k === "random") { a.x = Math.random() * (movie.width - box[2]) - box[0] - p.s; a.y = Math.random() * (movie.height - box[3]) - box[1]; a.vy = 0; }
+    else if (k === "top") { a.x = Math.random() * (movie.width - box[2]) - box[0] - p.s; a.y = 1 - box[1]; a.vy = 0; a.ground = false; }
+    else if (k === "hide") a.hidden = true;
+    else if (k === "jump") {
+      // As high as asked: the speed that the pull of Fall and Jump takes that long a way to stop. What has
+      // no such pull cannot jump.
+      var pull = acts(p.key, p.b).filter(function (l) { return l[0] === "gravity"; })[0];
+      if (pull && x > 0) { a.vy = -Math.sqrt(2 * Math.max(pull[1], 1) * x); a.ground = false; }
+    }
+    else if (k === "flash") a.flash = ticks + movie.fps * 1.2;
+    else if (k === "turn") a.turn = (a.turn || 0) + x * Math.PI / 180;
+    else if (k === "whirl") a.whirl = x;
+    else if (k === "size") a.size = Math.max(0, x / 100);
+    else if (k === "alpha") a.alpha = Math.max(0, Math.min(x / 100, 1));
+    else if (k === "give") {
+      // Given once, with the numbers the behavior starts with; what the object was drawn with comes back as it was.
+      var kind = step[4], first = movie.defaults[kind];
+      if (a.off) delete a.off[kind];
+      if (first && !has(p.key, p.b, kind)) (a.extra = a.extra || []).push([kind, first[0], first[1], a.n]);
+    }
+    else if (k === "take") {
+      var gone = step[4];
+      // What stops spinning stays turned the way it was.
+      acts(p.key, p.b).forEach(function (l) { if (l[0] === gone && gone === "spin") a.turn = (a.turn || 0) + Math.PI * 2 * (a.n - (l[3] || 0)) / movie.fps / span(l[1]) * (l[2] ? -1 : 1); });
+      (a.off = a.off || {})[gone] = true;
+      if (a.extra) a.extra = a.extra.filter(function (l) { return l[0] !== gone; });
+      if (gone === "ricochet") { a.rx = undefined; a.ry = undefined; }
+    }
+    else if (k === "go") {
+      // It reaches its speed in a little under half a second, from whatever speed it has now.
+      var way = step[4], gx = way === "left" ? -1 : way === "right" ? 1 : 0, gy = way === "up" ? -1 : way === "down" ? 1 : 0;
+      var was = a.go || { vx: 0, vy: 0 };
+      a.go = { vx: was.vx, vy: was.vy, tx: gx * x, ty: gy * x, acc: Math.max(Math.abs(x), 1) / 0.4 };
+    }
+    else if (k === "slow") {
+      // From the speed it has, it stands still in a second and a half.
+      if (a.go) { var pace3 = Math.sqrt(a.go.vx * a.go.vx + a.go.vy * a.go.vy); a.go.tx = 0; a.go.ty = 0; a.go.acc = Math.max(pace3, 1) / 1.5; }
+    }
+    else if (k === "stand") a.go = null;
+    else if (k === "attach") {
+      var holder = players.filter(function (q) { return meant(q, named(step[4])) && q.key !== p.key; })[0];
+      if (holder) { var hm = moved(holder.key, holder.b); a.parent = { key: holder.key, dx: hm.dx, dy: hm.dy }; }
+    }
+    else if (k === "detach") {
+      // It stays where it is: what it was carried by is kept as its own.
+      if (a.parent) { var now2 = moved(p.key, p.b); a.parent = null; var bare = moved(p.key, p.b); a.x += now2.dx - bare.dx; a.y += now2.dy - bare.dy; }
+    }
+    else if (k === "chase") a.chase = x > 0 ? { name: named(step[4]), speed: x } : null;
+    else if (k === "faster") a.rate = Math.max(0.05, Math.min(a.rate * (1 + x / 100), 20));
+    else if (k === "remove") {
+      // A copy is gone for good; anything else stays hidden until the film starts again.
+      a.hidden = true;
+      clones = clones.filter(function (c) { return keyOf(c.op) !== p.key; });
+    }
+  });
+  if (k === "rnd") numbers[name] = Math.floor(Math.min(x, y) + Math.random() * (Math.abs(y - x) + 1));
+  if (k === "camera") camRule = { name: name };
+  else if (k === "camera-stop") camRule = false;
+  // A number that is a value of the command being done is changed there, and is forgotten when the command ends.
+  var own = given && typeof given[name] === "number";
+  if (k === "add") { if (own) given[name] += x; else numbers[name] = (numbers[name] || 0) + x; }
+  else if (k === "set") { if (own) given[name] = x; else numbers[name] = x; }
+  else if (k === "stop") playing = false;
+  else if (k === "play") playing = true;
+  else if (k === "frame") go(scene, x - 1, true);
+  else if (k === "frame-stop") go(scene, x - 1, false);
+  else if (k === "scene") go(x - 1, 0, true);
+  else if (k === "next") go((scene + 1) % movie.scenes.length, 0, true);
+  else if (k === "sound") { if (sounds[x]) { try { sounds[x].currentTime = 0; sounds[x].play(); } catch (error) {} } }
+  else if (k === "halt") { frozen = true; playing = false; }
+  else if (k === "restart") restart();
+}
+// Whether every one of some conditions holds.
+function all(conditions, who) {
+  var players = cast();
+  return conditions.every(function (c) { return holds(valueOf(c[0]), c[1], amount(c[2], who, players)); });
+}
+// Goes on with a run of steps. A run keeps its place in a pile: the steps it is in, and under them the
+// steps those are held by, each with how far it has got. A loop is its steps gone through again; a
+// command is its steps put on the pile. A step that waits puts the whole run by until its time has
+// come. A loop that would never end is cut short, so that it cannot hold the page up.
+// The values that hold where a run has got to: those of the innermost command it is in.
+function valuesOf(job) {
+  for (var i = job.pile.length - 1; i >= 0; i -= 1) if (job.pile[i].given) return job.pile[i].given;
+  return null;
+}
+function resume(job) { try { advance(job); } finally { given = null; } }
+function advance(job) {
+  var done = 0;
+  while (job.pile.length) {
+    if ((done += 1) > 20000) return;
+    given = valuesOf(job);
+    var at = job.pile[job.pile.length - 1];
+    if (at.i >= at.s.length) {
+      if (at.times !== undefined && (at.times -= 1) > 0) { at.i = 0; continue; }
+      if (at.only && all(at.only, job.who)) { at.i = 0; continue; }
+      job.pile.pop();
+      continue;
+    }
+    var step = at.s[at.i], k = step[0];
+    at.i += 1;
+    if (k === "wait") {
+      waiting.push({ at: ticks + Math.max(0.01, amount(step[2], job.who, cast()) * movie.fps), job: job });
+      return;
+    }
+    if (k === "repeat") {
+      var times = Math.floor(amount(step[2], job.who, cast()));
+      if (times > 0 && step[5].length) job.pile.push({ s: step[5], i: 0, times: times });
+    } else if (k === "if") {
+      var chosen = all(step[6], job.who) ? step[5] : step[7];
+      if (chosen.length) job.pile.push({ s: chosen, i: 0 });
+    } else if (k === "while") {
+      if (step[5].length && all(step[6], job.who)) job.pile.push({ s: step[5], i: 0, only: step[6] });
+    } else if (k === "call") {
+      // A command that does itself goes no deeper than a pile of sixty. Each value it is given is worked out
+      // here, where it is done: a number or a sum gives a number, a bare name that is no number an object.
+      var command = movie.commands[step[1]];
+      if (command && job.pile.length < 60) {
+        var values = {}, players = cast();
+        command.p.forEach(function (param, index) {
+          var written = String(step[5][index] === undefined ? 0 : step[5][index]).trim();
+          var bare = /^("[^"]*"|[^\s+\-*\/().,"]+)$/.test(written), plain = written.replace(/^"|"$/g, "");
+          if (given && typeof given[plain] === "string") values[param] = given[plain];
+          else if (bare && isNaN(Number(written.replace(",", "."))) && numbers[plain] === undefined && !(given && typeof given[plain] === "number")) values[param] = plain;
+          else values[param] = bare && !isNaN(Number(written.replace(",", "."))) ? Number(written.replace(",", ".")) : sum(written, job.who, players);
+        });
+        if (command.s.length) job.pile.push({ s: command.s, i: 0, given: values });
+      }
+    } else take(step, job.who, cast());
+  }
+}
+function run(steps, who) { resume({ who: who, pile: [{ s: steps, i: 0 }] }); }
+// Follows a rule: its steps if everything it asks is so, and otherwise the steps it has for that.
+function follow(rule, who) {
+  who = who || {};
+  given = null;
+  if (!rule.c || all(rule.c, who)) run(rule.s, who); else if (rule.o) run(rule.o, who);
+}
+// Follows every rule of a kind that `fits` says is meant.
+function happen(kind, fits, who) {
+  movie.rules.forEach(function (rule) { if (rule.e[0] === kind && fits(rule.e)) follow(rule, who); });
+}
+function holds(value, how, against) { return how === ">" ? value > against : how === "<" ? value < against : value === against; }
+function atEdge(box, edge) {
+  var top = box[1] <= 0, bottom = box[1] + box[3] >= movie.height, left = box[0] <= 0, right = box[0] + box[2] >= movie.width;
+  return edge === "top" ? top : edge === "bottom" ? bottom : edge === "left" ? left : edge === "right" ? right : top || bottom || left || right;
+}
+// Looks at what has come to be since the last frame, and follows the rules that wait for it.
+// A thing that was already so when first looked at is not taken to have happened.
+function judge() {
+  var t = ticks / movie.fps, players = cast();
+  function came(id, now) { var before = seen[id]; seen[id] = now; return now && before === false; }
+  movie.rules.forEach(function (rule, index) {
+    var e = rule.e, k = e[0];
+    if (k === "every") {
+      var times = Math.floor(t / Math.max(e[3], 0.05));
+      if (times > (seen["n" + index] || 0)) { seen["n" + index] = times; follow(rule); }
+    } else if (k === "after") {
+      if (!seen["a" + index] && t >= e[3]) { seen["a" + index] = true; follow(rule); }
+    } else if (k === "number") {
+      if (came("v" + index, holds(numbers[e[1]] || 0, e[2], e[3]))) follow(rule);
+    } else if (k === "edge") {
+      players.forEach(function (p) {
+        if (p.name === e[1] && came("e" + index + ":" + p.key, atEdge(shown(p), e[2]))) { var who = {}; who[p.name] = p.key; follow(rule, who); }
+      });
+    } else if (k === "touch") {
+      players.forEach(function (p) {
+        if (p.name !== e[1]) return;
+        players.forEach(function (q) {
+          if (q.name !== e[2] || q.key === p.key) return;
+          // What is blinking from a hit cannot be touched until it stops: a moment to get away in.
+          var safe = actor(p.key).flash > ticks || actor(q.key).flash > ticks;
+          if (came("t" + index + ":" + p.key + ":" + q.key, !safe && meets(p, q))) { var who = {}; who[q.name] = q.key; who[p.name] = p.key; follow(rule, who); }
+        });
+      });
+    }
+  });
+}
+// Starts the film again from the beginning, with every number as it started.
+function restart() {
+  camX = 0; camKey = null; camRule = null;
+  actors = {}; clipFrames = {}; seen = {}; ticks = 0; owed = 0; frozen = false; dragging = null; clones = []; waiting = [];
+  startNumbers();
+  var same = scene === 0;
+  go(0, 0, true);
+  happen("start", function () { return true; });
+  if (same) happen("scene-start", function () { return true; });
+}
+// Writes a text that shows numbers, each in place of its {name}.
+function write(spec) {
+  var text = spec.text.replace(/\{([^{}]+)\}/g, function (all, name) { return name in numbers ? String(Math.round(numbers[name] * 100) / 100) : all; });
+  var family = spec.font ? "'" + spec.font + "'," : "";
+  stage.font = (spec.italic ? "italic " : "") + (spec.bold ? "bold " : "") + spec.size + "px " + family + "'Noto Sans','Liberation Sans','DejaVu Sans',Arial,sans-serif";
+  stage.fillStyle = spec.color;
+  stage.textAlign = spec.align;
+  stage.textBaseline = "middle";
+  var x = spec.align === "center" ? spec.x + spec.w / 2 : spec.align === "right" ? spec.x + spec.w : spec.x;
+  text.split("\n").forEach(function (line, row) { stage.fillText(line, x, spec.y + row * spec.lh + spec.lh / 2); });
+}
+function draw() {
+  stage.setTransform(1, 0, 0, 1, 0, 0);
+  stage.globalAlpha = 1;
+  stage.clearRect(0, 0, movie.width, movie.height);
+  if (movie.background) { stage.fillStyle = movie.background; stage.fillRect(0, 0, movie.width, movie.height); }
+  buttons = [];
+  grips = [];
+  ops().forEach(function (op) {
+    if (op[0] === "i") {
+      stage.setTransform(1, 0, 0, 1, 0, 0);
+      stage.globalAlpha = 1;
+      stage.drawImage(images[op[1]], 0, 0);
+      return;
+    }
+    var b = behaviorsOf(op), m = b ? moved(keyOf(op), b) : null;
+    if (b && actor(keyOf(op)).hidden) return;
+    // Drawn where the view has it.
+    if (b) m.dx += seen2(op, keyOf(op), b, b.box[0] + m.dx);
+    // What has just been hit blinks: it is left out of every other pair of frames for a little over a second.
+    if (b && actor(keyOf(op)).flash > ticks && Math.floor(ticks / 2) % 2 === 0) return;
+    if (b && has(keyOf(op), b, "drag")) grips.push({ key: keyOf(op), box: [b.box[0] + m.dx, b.box[1] + m.dy, b.box[2], b.box[3]] });
+    if (op[0] === "t") {
+      if (m) place(m, b); else stage.setTransform(1, 0, 0, 1, 0, 0);
+      stage.globalAlpha = m ? m.alpha : 1;
+      write(op[2]);
+      return;
+    }
+    if (op[0] === "m") {
+      place(m, b);
+      stage.globalAlpha = m.alpha;
+      stage.drawImage(images[op[1][0]], op[1][1], op[1][2]);
+      return;
+    }
+    var set = movie.sets[op[1]], picture;
+    if (op[0] === "c") {
+      picture = set[(clipFrames[op[4]] || 0) % set.length];
+    } else {
+      var box = op[6];
+      buttons.push({ key: op[4], action: op[5], box: m ? [box[0] + m.dx, box[1] + m.dy, box[2], box[3]] : box });
+      picture = set[hover === op[4] ? (pressed ? 2 : 1) : 0] || set[0];
+    }
+    if (!picture) return;
+    var matrix = op[2];
+    if (m) { place(m, b); stage.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]); }
+    else stage.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
+    stage.globalAlpha = op[3] * (m ? m.alpha : 1);
+    stage.drawImage(images[picture[0]], picture[1], picture[2]);
+  });
+}
+function tick(now) {
+  // How long since the screen was last drawn, as a part of a film frame. A long gap, as when the page was
+  // out of sight, counts for no more than a twentieth of a second, so that nothing leaps.
+  var gone = last ? Math.max(0, Math.min((now - last) / 1000, 0.05)) : 1 / 60;
+  last = now;
+  pace = gone * movie.fps;
+  // "Stop everything" holds the film as it is until it is started again.
+  if (frozen) { draw(); return; }
+  ticks += pace;
+  // What is solid, where it stands now.
+  walls = [];
+  ops().forEach(function (op) {
+    var b = behaviorsOf(op);
+    if (!b || !has(keyOf(op), b, "solid") || actor(keyOf(op)).hidden) return;
+    var m = moved(keyOf(op), b);
+    walls.push({ key: keyOf(op), box: [b.box[0] + m.dx, b.box[1] + m.dy, b.box[2], b.box[3]] });
+  });
+  // What was drawn attached to another object is tied to it the first time both are on the stage.
+  ops().forEach(function (op) {
+    var b = behaviorsOf(op), key = keyOf(op);
+    if (!b || !b.a || actor(key).drawnTie) return;
+    var holder = ops().filter(function (other) { var ob = behaviorsOf(other); return ob && ob.n === b.a && keyOf(other) !== key; })[0];
+    if (!holder) return;
+    var hm = moved(keyOf(holder), behaviorsOf(holder)), a = actor(key);
+    a.drawnTie = true;
+    a.parent = { key: keyOf(holder), dx: hm.dx, dy: hm.dy };
+  });
+  // So does every object with behaviors.
+  ops().forEach(function (op) { var b = behaviorsOf(op); if (b) step(keyOf(op), b, op); });
+  lens();
+  // The film itself goes on by whole frames, at its own rate: its drawings, and those of its movie clips,
+  // which go on by a frame of their own whether or not the scene is playing.
+  owed += pace;
+  while (owed >= 1) {
+    owed -= 1;
+    ops().forEach(function (op) { if (op[0] === "c") clipFrames[op[4]] = (clipFrames[op[4]] || 0) + 1; });
+    if (playing) {
+      frame += 1;
+      if (frame >= movie.scenes[scene].length) { scene = (scene + 1) % movie.scenes.length; frame = 0; }
+      depth = 0;
+      enter();
+    }
+  }
+  // The steps whose wait is over go on from where they stopped.
+  var due = waiting.filter(function (w) { return w.at <= ticks; });
+  waiting = waiting.filter(function (w) { return w.at > ticks; });
+  due.forEach(function (w) { resume(w.job); });
+  judge();
+  draw();
+}
+function start() {
+  startNumbers();
+  depth = 0;
+  enter();
+  happen("start", function () { return true; });
+  happen("scene-start", function () { return true; });
+  draw();
+  // Drawn as often as the screen is, where the browser can say when that is.
+  if (window.requestAnimationFrame) {
+    var again = function (now) { tick(now); window.requestAnimationFrame(again); };
+    window.requestAnimationFrame(again);
+  } else setInterval(function () { tick(Date.now()); }, 1000 / 60);
+}
+// Where the mouse is on the stage.
+function pointOf(event) {
+  var box = canvas.getBoundingClientRect();
+  return { x: (event.clientX - box.left) * movie.width / box.width, y: (event.clientY - box.top) * movie.height / box.height };
+}
+// The topmost of some boxes that holds a point.
+function topmost(list, at) {
+  for (var i = list.length - 1; i >= 0; i -= 1) {
+    var b = list[i].box;
+    if (at.x >= b[0] && at.y >= b[1] && at.x <= b[0] + b[2] && at.y <= b[1] + b[3]) return list[i];
+  }
+  return null;
+}
+canvas.addEventListener("mousemove", function (event) {
+  var at = pointOf(event);
+  if (dragging) {
+    var a = actor(dragging.key);
+    a.x += at.x - mouse.x; a.y += at.y - mouse.y; a.vy = 0;
+  }
+  mouse = at;
+  var over = topmost(buttons, at);
+  hover = over ? over.key : null;
+  canvas.style.cursor = over ? "pointer" : dragging ? "grabbing" : topmost(grips, at) ? "grab" : "default";
+  draw();
+});
+canvas.addEventListener("mouseleave", function () { hover = null; pressed = false; dragging = null; draw(); });
+canvas.addEventListener("mousedown", function (event) {
+  pressed = true;
+  mouse = pointOf(event);
+  dragging = topmost(buttons, mouse) ? null : topmost(grips, mouse);
+  // A click on a named object: the topmost one under the mouse, and the rules that wait for it.
+  var hit = frozen ? null : topmost(cast().map(function (p) { return { key: p.key, name: p.name, box: shown(p) }; }), mouse);
+  if (hit) { var who = {}; who[hit.name] = hit.key; happen("click", function (e) { return e[1] === hit.name; }, who); }
+  draw();
+});
+canvas.addEventListener("mouseup", function (event) {
+  pressed = false;
+  dragging = null;
+  var over = topmost(buttons, pointOf(event));
+  if (over) { depth = 0; act(over.action); }
+  draw();
+});
+// The keys held down. In a film that listens to them the arrows and Space do not scroll the page.
+var listens = JSON.stringify(movie.scenes).search(/\["(keys|gravity)",/) >= 0 || movie.rules.some(function (rule) { return rule.e[0] === "key" || rule.e[0] === "keyup"; });
+function keyed(event, down) {
+  if (down && !event.repeat && !frozen) {
+    var pressedKey = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    happen("key", function (e) { return e[1] === pressedKey; });
+  }
+  if (!down && !frozen) {
+    var letGo = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    happen("keyup", function (e) { return e[1] === letGo; });
+  }
+  keys[event.key] = down;
+  if (listens && (event.key.indexOf("Arrow") === 0 || event.key === " ")) event.preventDefault();
+}
+window.addEventListener("keydown", function (event) { keyed(event, true); });
+window.addEventListener("keyup", function (event) { keyed(event, false); });
+</script>
+</body>
+</html>

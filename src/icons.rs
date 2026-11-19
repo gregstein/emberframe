@@ -1,3 +1,21 @@
+// This file is part of PisiWorks.
+// Copyright (C) 2026 Murat SAPMAZ
+// Portions copyright (c) 2026 Med Amine Belbachir, from Emberframe, under the MIT license:
+// see LICENSES/MIT.txt and NOTICE.
+//
+// PisiWorks is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// PisiWorks is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with PisiWorks. If
+// not, see <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //! Original icons, served to GPUI as in-memory SVG assets.
 //!
 //! Plain icons are one black shape tinted when drawn. Colored icons are a stack of
@@ -36,6 +54,14 @@ pub fn colored(name: &str) -> Option<&'static [Layer]> {
         "scale" => &[
             (SKY, r#"<rect x="3" y="5" width="8" height="8" fill="black" stroke="none"/>"#),
             (INK, r#"<rect x="3" y="5" width="8" height="8"/><path d="M8.500 7.500L14 2M10.500 2H14v3.500"/>"#),
+        ],
+        "skew" => &[
+            (SKY, r#"<path fill="black" stroke="none" d="M5.500 4H14l-3.500 8.500H2z"/>"#),
+            (INK, r#"<path d="M5.500 4H14l-3.500 8.500H2z"/>"#),
+        ],
+        "distort" => &[
+            (SKY, r#"<path fill="black" stroke="none" d="M3 3.500l10.500 2.500-2 7L2 10.500z"/>"#),
+            (INK, r#"<path d="M3 3.500l10.500 2.500-2 7L2 10.500z"/>"#),
         ],
         "crop" => &[(INK, r#"<path stroke-width="1.700" d="M4.500 1v10.500H15M1 4.500h10.500V15"/>"#)],
         "marquee" => &[(INK, r#"<rect x="2.500" y="3.500" width="11" height="9" stroke-dasharray="2 1.600"/>"#)],
@@ -98,6 +124,96 @@ pub fn colored(name: &str) -> Option<&'static [Layer]> {
         "freeform" => &[
             (INK, r#"<path d="M2.500 12c2-7 4-7 5.500-4s3.500 3 5.500-4"/>"#),
             (BLUE, r#"<circle cx="8" cy="8" r="1.800" fill="black"/>"#),
+        ],
+        "scrub-add" => &[
+            (INK, r#"<path stroke-width="1" d="M2 11c2-5 4-5 6-2"/><path stroke-width="3" d="M8 9c2 3 4 2 6-3"/>"#),
+            (GREEN, r#"<path stroke-width="1.500" d="M11.500 1.500v4M9.500 3.500h4"/>"#),
+        ],
+        "scrub-subtract" => &[
+            (INK, r#"<path stroke-width="3" d="M2 11c2-5 4-5 6-2"/><path stroke-width="1" d="M8 9c2 3 4 2 6-3"/>"#),
+            (RED, r#"<path stroke-width="1.500" d="M9.500 3.500h4"/>"#),
+        ],
+        "nine-slice" => &[
+            (GRAY, r#"<rect x="2.500" y="2.500" width="11" height="11" fill="black" stroke="none"/>"#),
+            (INK, r#"<rect x="2.500" y="2.500" width="11" height="11"/>"#),
+            (BLUE, r#"<path d="M6 1.500v13M10 1.500v13M1.500 6h13M1.500 10h13"/>"#),
+        ],
+        "export-area" => &[
+            (INK, r#"<rect x="2.500" y="5.500" width="8" height="8" stroke-dasharray="2 1.400"/>"#),
+            (GREEN, r#"<path stroke-width="1.500" d="M8 8l5.500-5.500M10 2.500h3.500V6"/>"#),
+        ],
+        "reshape-area" => &[
+            (SKY, r#"<circle cx="9.500" cy="7" r="4.500" fill="black" stroke="none"/>"#),
+            (INK, r#"<path d="M2 12.500c2-6 4-7 6-4s3.500 3 6-3"/>"#),
+            (BLUE, r#"<circle cx="9.500" cy="7" r="4.500"/>"#),
+        ],
+        "redraw-path" => &[
+            (GRAY, r#"<path stroke-dasharray="1.500 1.200" d="M2 12c2-2 4-2 6 0s4 2 6 0"/>"#),
+            (INK, r#"<path d="M4.500 11c1-5 5-6 7 0"/>"#),
+            (ORANGE, r#"<path fill="black" stroke="none" d="M10.500 5l3.500-3.500 1 1-3.500 3.500z"/>"#),
+        ],
+        "circle-hotspot" => &[
+            (SKY, r#"<circle cx="8" cy="8" r="5.500" fill="black" stroke="none"/>"#),
+            (BLUE, r#"<circle cx="8" cy="8" r="5.500"/>"#),
+            (INK, r#"<path fill="black" stroke="none" d="M7 6l5 4.500H9.500l1 2.300-1 .4-1-2.300L7 12.500z"/>"#),
+        ],
+        "polygon-hotspot" => &[
+            (SKY, r#"<path fill="black" stroke="none" d="M3 4l6-2 4.500 4-2 6.500-7 1z"/>"#),
+            (BLUE, r#"<path d="M3 4l6-2 4.500 4-2 6.500-7 1z"/>"#),
+            (INK, r#"<path fill="black" stroke="none" d="M7 6l5 4.500H9.500l1 2.300-1 .4-1-2.300L7 12.500z"/>"#),
+        ],
+        "polygon-slice" => &[
+            (LIME, r#"<path fill="black" stroke="none" d="M3 4l6-2 4.500 4-2 6.500-7 1z"/>"#),
+            (GREEN, r#"<path d="M3 4l6-2 4.500 4-2 6.500-7 1zM3.500 8h9.500"/>"#),
+        ],
+        "select-behind" => &[
+            (GRAY, r#"<rect x="7.500" y="2.500" width="7" height="6" fill="black" stroke="none"/>"#),
+            (INK, r#"<rect x="7.500" y="2.500" width="7" height="6" stroke-dasharray="1.500 1"/>"#),
+            (INK, r#"<path fill="black" d="M2 4.500l6.500 5.800H5.400l1.700 3.500-1.300.6-1.700-3.500L2 13z"/>"#),
+        ],
+        "oval-marquee" => &[(INK, r#"<ellipse cx="8" cy="8" rx="5.500" ry="4.500" stroke-dasharray="2 1.600"/>"#)],
+        "polygon-lasso" => &[
+            (INK, r#"<path stroke-dasharray="2 1.400" d="M3 4.500l5-2 5 3.500-2.500 5-6-1z"/>"#),
+            (TAN, r#"<path stroke-width="1.500" d="M4.500 10c-1 1.500 0 3.500 1.500 3.500"/>"#),
+        ],
+        "sharpen" => &[
+            (SKY, r#"<path fill="black" stroke="none" d="M8 2l4.500 10h-9z"/>"#),
+            (BLUE, r#"<path d="M8 2l4.500 10h-9z"/>"#),
+        ],
+        "dodge" => &[
+            (PAPER, r#"<circle cx="7" cy="6.500" r="4" fill="black" stroke="none"/>"#),
+            (INK, r#"<circle cx="7" cy="6.500" r="4"/><path stroke-width="1.700" d="M9.800 9.500L13.500 14"/>"#),
+        ],
+        "burn" => &[
+            (INK, r#"<path fill="black" d="M4 6.500c0-2 1.500-3.500 3.500-3.500S11 4 11 6l1.500 1v3H10l-1 3.500H6.500V10H5.500C4.500 9.500 4 8 4 6.500z"/>"#),
+        ],
+        "smudge" => &[
+            (PEACH, r#"<path fill="black" stroke="none" d="M6.500 2.500h2.500v6l3 1.500v4h-7V9z"/>"#),
+            (INK, r#"<path d="M6.500 2.500h2.500v6l3 1.500v4h-7V9zM6.500 5h2.500"/>"#),
+        ],
+        "replace-color" => &[
+            (RED, r#"<rect x="2" y="2.500" width="5.500" height="5.500" fill="black" stroke="none"/>"#),
+            (GREEN, r#"<rect x="8.500" y="8" width="5.500" height="5.500" fill="black" stroke="none"/>"#),
+            (INK, r#"<path d="M9.500 3.500h3v3M12.500 3.500L9 7M6.500 12.500h-3v-3M3.500 12.500L7 9"/>"#),
+        ],
+        "red-eye" => &[
+            (PAPER, r#"<path fill="black" stroke="none" d="M1.500 8c2-3.500 4-5 6.500-5s4.500 1.500 6.500 5c-2 3.500-4 5-6.500 5s-4.500-1.500-6.500-5z"/>"#),
+            (RED, r#"<circle cx="8" cy="8" r="2.600" fill="black" stroke="none"/>"#),
+            (INK, r#"<path d="M1.500 8c2-3.500 4-5 6.500-5s4.500 1.500 6.500 5c-2 3.500-4 5-6.500 5s-4.500-1.500-6.500-5z"/>"#),
+        ],
+        "vector-path" => &[
+            (INK, r#"<path d="M2 12c1.500-6 3.500-7 5-4s3 4 4.500 0"/>"#),
+            (ORANGE, r#"<path fill="black" stroke="none" d="M11 6l3.500-4 1 1-4 3.500z"/>"#),
+        ],
+        "polygon" => &[
+            (STEEL, r#"<path fill="black" stroke="none" d="M8 2l5.700 4.100-2.200 6.700h-7L2.300 6.100z"/>"#),
+            (INK, r#"<path d="M8 2l5.700 4.100-2.200 6.700h-7L2.300 6.100z"/>"#),
+        ],
+        "gradient" => &[
+            (INK, r#"<rect x="2.500" y="3.500" width="3" height="9" fill="black" stroke="none"/>"#),
+            (STEEL, r#"<rect x="5.500" y="3.500" width="3" height="9" fill="black" stroke="none"/>"#),
+            (GRAY, r#"<rect x="8.500" y="3.500" width="2.500" height="9" fill="black" stroke="none"/>"#),
+            (INK, r#"<rect x="2.500" y="3.500" width="11" height="9"/>"#),
         ],
         "knife" => &[
             (GRAY, r#"<path fill="black" stroke="none" d="M2 14L10 3l3 2-6 6z"/>"#),
@@ -284,6 +400,8 @@ fn plain(name: &str) -> Option<&'static str> {
     Some(match name {
         "align-left" => r#"<path d="M2 1.500v13"/><rect x="4" y="3.500" width="9" height="3"/><rect x="4" y="9.500" width="5.500" height="3"/>"#,
         "align-center-x" => r#"<path d="M8 1.500v13"/><rect x="3" y="3.500" width="10" height="3"/><rect x="5" y="9.500" width="6" height="3"/>"#,
+        "align-justify" => r#"<rect x="2.500" y="3.500" width="11" height="3"/><rect x="2.500" y="9.500" width="11" height="3"/>"#,
+        "align-stretch" => r#"<path d="M2 1.500v13M14 1.500v13"/><path d="M4 8h8M6 5.500L4 8l2 2.500M10 5.500L12 8l-2 2.500"/>"#,
         "align-right" => r#"<path d="M14 1.500v13"/><rect x="3" y="3.500" width="9" height="3"/><rect x="6.500" y="9.500" width="5.500" height="3"/>"#,
         "align-top" => r#"<path d="M1.500 2h13"/><rect x="3.500" y="4" width="3" height="9"/><rect x="9.500" y="4" width="3" height="5.500"/>"#,
         "align-center-y" => r#"<path d="M1.500 8h13"/><rect x="3.500" y="3" width="3" height="10"/><rect x="9.500" y="5" width="3" height="6"/>"#,
@@ -299,6 +417,7 @@ fn plain(name: &str) -> Option<&'static str> {
         "chevron-down" => r#"<path fill="black" stroke="none" d="M3 5.500h10L8 11z"/>"#,
         "triangle-open" => r#"<path fill="black" stroke="none" d="M3 5h10l-5 7z"/>"#,
         "triangle-closed" => r#"<path fill="black" stroke="none" d="M5 3l7 5-7 5z"/>"#,
+        "link" => r#"<path d="M6.300 9.700l3.400-3.400M7.200 5L8.700 3.500a2.700 2.700 0 013.800 3.800L11 8.800M8.800 11L7.300 12.500a2.700 2.700 0 01-3.800-3.800L5 7.200"/>"#,
         "check" => r#"<path d="M3 8.500l3.500 3.500L13 4.500" stroke-width="1.800"/>"#,
         "duplicate" => r#"<rect x="2.500" y="2.500" width="8" height="8"/><path d="M13.500 5.500v8h-8"/>"#,
         "play" => r#"<path fill="black" d="M4.500 2.500l9 5.500-9 5.500z"/>"#,

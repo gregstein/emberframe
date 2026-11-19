@@ -1,5 +1,24 @@
+// This file is part of PisiWorks.
+// Copyright (C) 2026 Murat SAPMAZ
+// Portions copyright (c) 2026 Med Amine Belbachir, from Emberframe, under the MIT license:
+// see LICENSES/MIT.txt and NOTICE.
+//
+// PisiWorks is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// PisiWorks is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with PisiWorks. If
+// not, see <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //! The built-in Common Library. Every item is drawn from code for this application.
 
+use crate::i18n::{t};
 use crate::autoshape::AutoKind;
 use crate::model::{v2, Color, Object, Rect, Shape, Stroke};
 use crate::export::measure_text;
@@ -30,6 +49,20 @@ fn base(shape: Shape, name: &str, bounds: Rect, fill: Option<Color>, stroke: Opt
         shape,
         bounds,
         points: Vec::new(),
+        handles: Vec::new(),
+        placement: None,
+        pivot: None,
+
+        behaviors: Vec::new(),
+        attached: String::new(),
+        blend: crate::blend::BlendMode::Normal,
+        mask: None,
+        mask_of: None,
+        fill_style: None,
+        stroke_profile: Vec::new(),
+        fill_look: Default::default(),
+        link: String::new(),
+        filters: Vec::new(),
         fill,
         stroke: stroke.map(|color| Stroke { color, width: 1.0 }),
         opacity: 1.0,
@@ -43,11 +76,11 @@ fn r(x: f32, y: f32, w: f32, h: f32) -> Rect {
 }
 
 fn rect(bounds: Rect, radius: f32, fill: Option<Color>, stroke: Option<Color>) -> Object {
-    base(Shape::Rect { radius }, "Rectangle", bounds, fill, stroke)
+    base(Shape::Rect { radius }, t("Rectangle"), bounds, fill, stroke)
 }
 
 fn ellipse(bounds: Rect, fill: Option<Color>, stroke: Option<Color>) -> Object {
-    base(Shape::Ellipse, "Ellipse", bounds, fill, stroke)
+    base(Shape::Ellipse, t("Ellipse"), bounds, fill, stroke)
 }
 
 fn auto(kind: AutoKind, bounds: Rect, fill: Option<Color>, stroke: Option<Color>) -> Object {
@@ -57,7 +90,7 @@ fn auto(kind: AutoKind, bounds: Rect, fill: Option<Color>, stroke: Option<Color>
 
 fn line(a: (f32, f32), b: (f32, f32), color: Color, width: f32) -> Object {
     let points = vec![v2(a.0, a.1), v2(b.0, b.1)];
-    let mut object = base(Shape::Line, "Line", Rect::of_points(&points), None, Some(color));
+    let mut object = base(Shape::Line, t("Line"), Rect::of_points(&points), None, Some(color));
     object.points = points;
     object.stroke = Some(Stroke { color, width });
     object
@@ -65,7 +98,7 @@ fn line(a: (f32, f32), b: (f32, f32), color: Color, width: f32) -> Object {
 
 fn poly(points: &[(f32, f32)], fill: Option<Color>, stroke: Option<Color>) -> Object {
     let points: Vec<_> = points.iter().map(|p| v2(p.0, p.1)).collect();
-    let mut object = base(Shape::Path { closed: true }, "Path", Rect::of_points(&points), fill, stroke);
+    let mut object = base(Shape::Path { closed: true }, t("Path"), Rect::of_points(&points), fill, stroke);
     object.points = points;
     object
 }
@@ -73,7 +106,7 @@ fn poly(points: &[(f32, f32)], fill: Option<Color>, stroke: Option<Color>) -> Ob
 /// Text placed by its top-left corner.
 fn text(x: f32, y: f32, content: &str, size: f32, color: Color) -> Object {
     let (w, h) = measure_text(content, size);
-    base(Shape::Text { content: content.into(), size }, "Text", r(x, y, w, h), Some(color), None)
+    base(Shape::Text { content: content.into(), size, style: Default::default() }, t("Text"), r(x, y, w, h), Some(color), None)
 }
 
 /// Text centered inside `area`.
@@ -84,7 +117,7 @@ fn label(area: Rect, content: &str, size: f32, color: Color) -> Object {
 
 fn button(fill: Option<Color>, stroke: Option<Color>, ink: Color, radius: f32) -> Vec<Object> {
     let area = r(0.0, 0.0, 120.0, 36.0);
-    vec![rect(area, radius, fill, stroke), label(area, "Button", 14.0, ink)]
+    vec![rect(area, radius, fill, stroke), label(area, t("Button"), 14.0, ink)]
 }
 
 const ITEMS: &[CommonItem] = &[
@@ -94,7 +127,7 @@ const ITEMS: &[CommonItem] = &[
     CommonItem {
         name: "Text Input",
         category: "Forms",
-        build: || vec![rect(r(0.0, 0.0, 200.0, 32.0), 2.0, Some(PAPER), Some(LINE)), text(10.0, 8.0, "Placeholder", 13.0, MUTED)],
+        build: || vec![rect(r(0.0, 0.0, 200.0, 32.0), 2.0, Some(PAPER), Some(LINE)), text(10.0, 8.0, t("Placeholder"), 13.0, MUTED)],
     },
     CommonItem {
         name: "Dropdown",
@@ -102,7 +135,7 @@ const ITEMS: &[CommonItem] = &[
         build: || {
             vec![
                 rect(r(0.0, 0.0, 200.0, 32.0), 2.0, Some(PAPER), Some(LINE)),
-                text(10.0, 8.0, "Choose one", 13.0, INK),
+                text(10.0, 8.0, t("Choose one"), 13.0, INK),
                 poly(&[(176.0, 13.0), (188.0, 13.0), (182.0, 20.0)], Some(INK), None),
             ]
         },
@@ -165,7 +198,7 @@ const ITEMS: &[CommonItem] = &[
             vec![
                 rect(r(0.0, 0.0, 180.0, 200.0), 6.0, Some(PAPER), Some(LINE)),
                 rect(r(10.0, 10.0, 160.0, 90.0), 2.0, Some(SHADE), None),
-                text(10.0, 110.0, "Title", 16.0, INK),
+                text(10.0, 110.0, t("Title"), 16.0, INK),
                 rect(r(10.0, 142.0, 150.0, 6.0), 0.0, Some(SHADE), None),
                 rect(r(10.0, 156.0, 120.0, 6.0), 0.0, Some(SHADE), None),
             ]
@@ -174,7 +207,7 @@ const ITEMS: &[CommonItem] = &[
     CommonItem {
         name: "Callout",
         category: "Layout",
-        build: || vec![auto(AutoKind::Bubble, r(0.0, 0.0, 160.0, 90.0), Some(PAPER), Some(LINE)), label(r(0.0, 0.0, 160.0, 70.0), "Note", 14.0, INK)],
+        build: || vec![auto(AutoKind::Bubble, r(0.0, 0.0, 160.0, 90.0), Some(PAPER), Some(LINE)), label(r(0.0, 0.0, 160.0, 70.0), t("Note"), 14.0, INK)],
     },
     CommonItem {
         name: "Home",
@@ -224,12 +257,12 @@ const ITEMS: &[CommonItem] = &[
     CommonItem {
         name: "Start",
         category: "Flowchart",
-        build: || vec![rect(r(0.0, 0.0, 120.0, 44.0), 22.0, Some(PAPER), Some(INK)), label(r(0.0, 0.0, 120.0, 44.0), "Start", 14.0, INK)],
+        build: || vec![rect(r(0.0, 0.0, 120.0, 44.0), 22.0, Some(PAPER), Some(INK)), label(r(0.0, 0.0, 120.0, 44.0), t("Start"), 14.0, INK)],
     },
     CommonItem {
         name: "Process",
         category: "Flowchart",
-        build: || vec![rect(r(0.0, 0.0, 120.0, 60.0), 0.0, Some(PAPER), Some(INK)), label(r(0.0, 0.0, 120.0, 60.0), "Process", 14.0, INK)],
+        build: || vec![rect(r(0.0, 0.0, 120.0, 60.0), 0.0, Some(PAPER), Some(INK)), label(r(0.0, 0.0, 120.0, 60.0), t("Process"), 14.0, INK)],
     },
     CommonItem {
         name: "Decision",
@@ -237,7 +270,7 @@ const ITEMS: &[CommonItem] = &[
         build: || {
             vec![
                 poly(&[(70.0, 0.0), (140.0, 45.0), (70.0, 90.0), (0.0, 45.0)], Some(PAPER), Some(INK)),
-                label(r(0.0, 0.0, 140.0, 90.0), "Decide", 14.0, INK),
+                label(r(0.0, 0.0, 140.0, 90.0), t("Decide"), 14.0, INK),
             ]
         },
     },

@@ -1,3 +1,21 @@
+// This file is part of PisiWorks.
+// Copyright (C) 2026 Murat SAPMAZ
+// Portions copyright (c) 2026 Med Amine Belbachir, from Emberframe, under the MIT license:
+// see LICENSES/MIT.txt and NOTICE.
+//
+// PisiWorks is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// PisiWorks is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with PisiWorks. If
+// not, see <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //! Path panel operations: boolean combines and path alterations.
 
 use i_overlay::core::fill_rule::FillRule;
@@ -6,6 +24,7 @@ use i_overlay::float::single::SingleFloatOverlay;
 use i_overlay::mesh::float::stroke::offset::StrokeOffset;
 use i_overlay::mesh::float::style::{LineCap, LineJoin, StrokeStyle};
 
+use crate::i18n::{t};
 use crate::model::{bridge, contours, v2, Editor, Object, Rect, Shape, Vec2};
 
 type Contour = Vec<[f64; 2]>;
@@ -34,16 +53,16 @@ pub enum PathOp {
 impl PathOp {
     pub fn label(self) -> &'static str {
         match self {
-            PathOp::Union => "Union",
-            PathOp::Intersect => "Intersect",
-            PathOp::Punch => "Punch",
-            PathOp::Crop => "Crop",
-            PathOp::Join => "Join",
-            PathOp::Split => "Split",
-            PathOp::Simplify => "Simplify",
-            PathOp::ExpandStroke => "Expand Stroke",
-            PathOp::Inset => "Inset",
-            PathOp::Outset => "Outset",
+            PathOp::Union => t("Union"),
+            PathOp::Intersect => t("Intersect"),
+            PathOp::Punch => t("Punch"),
+            PathOp::Crop => t("Crop"),
+            PathOp::Join => t("Join"),
+            PathOp::Split => t("Split"),
+            PathOp::Simplify => t("Simplify"),
+            PathOp::ExpandStroke => t("Expand Stroke"),
+            PathOp::Inset => t("Inset"),
+            PathOp::Outset => t("Outset"),
         }
     }
 
@@ -90,10 +109,13 @@ fn stroked(contours: &Contours, width: f64, closed: bool, join: LineJoin<f64>) -
 fn result_object(id: u64, template: &Object, points: Vec<Vec2>, closed: bool) -> Object {
     let mut object = template.clone();
     object.id = id;
-    object.name = "Path".into();
+    object.name = t("Path").into();
     object.shape = Shape::Path { closed };
+    // The operations work on straight pieces. Curves are fitted to what they return,
+    // so a curved shape comes back as a curved path with a few vertices.
+    (object.points, object.handles) = crate::fit::fit_curves(&points, closed, crate::fit::TOLERANCE);
+    object.placement = None;
     object.bounds = Rect::of_points(&points);
-    object.points = points;
     object
 }
 
@@ -155,19 +177,19 @@ impl Editor {
     pub fn path_op(&mut self, op: PathOp, amount: f32) -> Result<usize, &'static str> {
         let selected: Vec<Object> = self.doc.page().objects().filter(|o| self.is_selected(o.id)).cloned().collect();
         if selected.is_empty() {
-            return Err("Select one or more vector shapes first");
+            return Err(t("Select one or more vector shapes first"));
         }
         if selected.iter().any(|o| !o.reshapable()) {
-            return Err("Path operations work on vector shapes, not text, bitmaps, symbols or web areas");
+            return Err(t("Path operations work on vector shapes, not text, bitmaps, symbols or web areas"));
         }
         if op.needs_two() && selected.len() < 2 {
-            return Err("Select at least two shapes to combine");
+            return Err(t("Select at least two shapes to combine"));
         }
         let results = self.path_results(op, &selected, amount as f64)?;
         if results.is_empty() {
             return Err(match op {
-                PathOp::Intersect | PathOp::Crop => "The shapes do not overlap",
-                _ => "That would leave nothing behind",
+                PathOp::Intersect | PathOp::Crop => t("The shapes do not overlap"),
+                _ => t("That would leave nothing behind"),
             });
         }
         let objects: Vec<Object> = results
@@ -225,7 +247,7 @@ impl Editor {
                     })
                     .collect();
                 if parts.len() == selected.len() {
-                    return Err("Only joined paths and shapes with holes can be split");
+                    return Err(t("Only joined paths and shapes with holes can be split"));
                 }
                 parts
             }
@@ -243,7 +265,7 @@ impl Editor {
                 let mut results = Vec::new();
                 for (i, object) in selected.iter().enumerate() {
                     let Some(stroke) = object.stroke.filter(|s| s.width > 0.0) else {
-                        return Err("Expand Stroke needs objects that have a stroke");
+                        return Err(t("Expand Stroke needs objects that have a stroke"));
                     };
                     let shapes = stroked(&contours_of(object), stroke.width as f64, object.is_closed(), LineJoin::Round(ROUND_STEP));
                     results.extend(filled(shapes, i));
@@ -254,7 +276,7 @@ impl Editor {
                 let mut results = Vec::new();
                 for (i, object) in selected.iter().enumerate() {
                     if !object.is_closed() {
-                        return Err("Inset and Outset work on closed shapes");
+                        return Err(t("Inset and Outset work on closed shapes"));
                     }
                     let shape = contours_of(object);
                     let ring = flatten(stroked(&shape, amount * 2.0, true, LineJoin::Miter(ROUND_STEP)));
@@ -280,6 +302,20 @@ mod tests {
             shape: Shape::Rect { radius: 0.0 },
             bounds: Rect { x, y, w, h },
             points: Vec::new(),
+            handles: Vec::new(),
+            placement: None,
+            pivot: None,
+
+            behaviors: Vec::new(),
+            attached: String::new(),
+            blend: crate::blend::BlendMode::Normal,
+            mask: None,
+            mask_of: None,
+            fill_style: None,
+            stroke_profile: Vec::new(),
+            fill_look: Default::default(),
+            link: String::new(),
+            filters: Vec::new(),
             fill: Some(Color::rgb(10, 20, 30)),
             stroke: Some(Stroke { color: Color::BLACK, width: 4.0 }),
             opacity: 1.0,
@@ -314,6 +350,42 @@ mod tests {
         let b = only(&ed).bounds;
         assert!(near(b.x, 0.0) && near(b.right(), 150.0) && near(b.bottom(), 150.0), "{b:?}");
         assert_eq!(ed.selection.len(), 1);
+    }
+
+    #[test]
+    fn joining_two_circles_gives_a_curved_path_with_few_vertices() {
+        let mut left = rect(1, 0.0, 0.0, 100.0, 100.0);
+        left.shape = Shape::Ellipse;
+        let mut right = rect(2, 60.0, 0.0, 100.0, 100.0);
+        right.shape = Shape::Ellipse;
+        let mut ed = editor(vec![left, right]);
+        assert_eq!(ed.path_op(PathOp::Union, 0.0), Ok(1));
+        let joined = only(&ed);
+        assert!(joined.is_curved(), "the result is curves, not a polygon");
+        assert!(joined.points.len() <= 12, "{} vertices", joined.points.len());
+        let b = joined.bounds;
+        assert!(near(b.x, 0.0) && near(b.right(), 160.0) && near(b.y, 0.0) && near(b.bottom(), 100.0), "{b:?}");
+        // The two points where the circles cross stay sharp, and the rest of the outline is on a circle.
+        let corners = (0..joined.points.len()).filter(|i| {
+            let h = joined.handles_at(*i);
+            let cross = h.before.x * h.after.y - h.before.y * h.after.x;
+            cross.abs() > 0.2 * (h.before.x.hypot(h.before.y) * h.after.x.hypot(h.after.y)).max(1e-3)
+        });
+        assert_eq!(corners.count(), 2);
+        for p in joined.outline() {
+            let to_left = ((p.x - 50.0).powi(2) + (p.y - 50.0).powi(2)).sqrt();
+            let to_right = ((p.x - 110.0).powi(2) + (p.y - 50.0).powi(2)).sqrt();
+            assert!((to_left - 50.0).abs() < 0.8 || (to_right - 50.0).abs() < 0.8, "{p:?} is on neither circle");
+        }
+    }
+
+    #[test]
+    fn straight_shapes_come_back_as_plain_corners() {
+        let mut ed = editor(vec![rect(1, 0.0, 0.0, 100.0, 100.0), rect(2, 50.0, 50.0, 100.0, 100.0)]);
+        ed.path_op(PathOp::Union, 0.0).unwrap();
+        let joined = only(&ed);
+        assert!(!joined.is_curved());
+        assert_eq!(joined.points.len(), 8);
     }
 
     #[test]
@@ -392,7 +464,7 @@ mod tests {
     #[test]
     fn text_is_refused() {
         let mut text = rect(1, 0.0, 0.0, 10.0, 10.0);
-        text.shape = Shape::Text { content: "a".into(), size: 12.0 };
+        text.shape = Shape::Text { content: "a".into(), size: 12.0, style: Default::default() };
         let mut ed = editor(vec![text]);
         assert!(ed.path_op(PathOp::Simplify, 1.0).is_err());
     }

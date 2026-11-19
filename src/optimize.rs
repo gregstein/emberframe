@@ -1,3 +1,21 @@
+// This file is part of PisiWorks.
+// Copyright (C) 2026 Murat SAPMAZ
+// Portions copyright (c) 2026 Med Amine Belbachir, from Emberframe, under the MIT license:
+// see LICENSES/MIT.txt and NOTICE.
+//
+// PisiWorks is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// PisiWorks is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with PisiWorks. If
+// not, see <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //! Export encoders driven by the Optimize panel.
 
 use std::collections::{HashMap, HashSet};
@@ -10,6 +28,7 @@ use image::{ExtendedColorType, ImageEncoder};
 use serde::{Deserialize, Serialize};
 use tiny_skia::Pixmap;
 
+use crate::i18n::{t, tf};
 use crate::export::{export_image, render_page};
 use crate::model::{Color, Page};
 
@@ -43,7 +62,7 @@ impl ExportFormat {
     pub fn label(self) -> &'static str {
         match self {
             ExportFormat::Gif => "GIF",
-            ExportFormat::AnimatedGif => "Animated GIF",
+            ExportFormat::AnimatedGif => t("Animated GIF"),
             ExportFormat::Jpeg => "JPEG",
             ExportFormat::Png8 => "PNG 8",
             ExportFormat::Png24 => "PNG 24",
@@ -72,13 +91,13 @@ impl ExportFormat {
 
 /// Ready-made settings offered at the top of the Optimize panel.
 pub const PRESETS: [(&str, ExportSettings); 7] = [
-    ("GIF Web 216", ExportSettings { format: ExportFormat::Gif, quality: 80, colors: 216, transparent: false, matte: None }),
-    ("GIF Web 256", ExportSettings { format: ExportFormat::Gif, quality: 80, colors: 256, transparent: false, matte: None }),
-    ("Animated GIF", ExportSettings { format: ExportFormat::AnimatedGif, quality: 80, colors: 256, transparent: false, matte: None }),
-    ("JPEG - Better Quality", ExportSettings { format: ExportFormat::Jpeg, quality: 80, colors: 256, transparent: false, matte: None }),
-    ("JPEG - Smaller File", ExportSettings { format: ExportFormat::Jpeg, quality: 60, colors: 256, transparent: false, matte: None }),
-    ("PNG 8", ExportSettings { format: ExportFormat::Png8, quality: 80, colors: 256, transparent: false, matte: None }),
-    ("PNG 32", ExportSettings { format: ExportFormat::Png32, quality: 80, colors: 256, transparent: false, matte: None }),
+    ("GIF Web 216", ExportSettings { format: ExportFormat::Gif, quality: 80, colors: 216, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("GIF Web 256", ExportSettings { format: ExportFormat::Gif, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("Animated GIF", ExportSettings { format: ExportFormat::AnimatedGif, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("JPEG - Better Quality", ExportSettings { format: ExportFormat::Jpeg, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("JPEG - Smaller File", ExportSettings { format: ExportFormat::Jpeg, quality: 60, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("PNG 8", ExportSettings { format: ExportFormat::Png8, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
+    ("PNG 32", ExportSettings { format: ExportFormat::Png32, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }),
 ];
 
 /// The settings compared in 4-Up view: the current ones and two cheaper alternatives.
@@ -107,7 +126,7 @@ pub fn comparison_settings(current: ExportSettings) -> [ExportSettings; 3] {
 pub fn settings_label(settings: &ExportSettings) -> String {
     match settings.format {
         ExportFormat::Jpeg => format!("JPEG {}%", settings.quality),
-        format if format.is_indexed() => format!("{} {} colors", format.label(), settings.colors),
+        format if format.is_indexed() => tf("{} {} colors", &[&format.label(), &settings.colors]),
         format => format.label().to_string(),
     }
 }
@@ -139,12 +158,65 @@ pub struct ExportSettings {
     pub transparent: bool,
     /// Backdrop for flattened areas; `None` is white.
     pub matte: Option<Color>,
+    /// JPEG smoothing, 0 to 8: how much the picture is blurred before it is compressed,
+    /// which hides blocking and makes the file smaller.
+    #[serde(default)]
+    pub smoothing: u8,
+    /// Whether the page's JPEG mask, and text if `preserve_text` is set, is written at `selective_quality`.
+    #[serde(default)]
+    pub selective: bool,
+    #[serde(default = "default_selective_quality")]
+    pub selective_quality: u8,
+    #[serde(default)]
+    pub preserve_text: bool,
+    /// Whether copies of button symbols are written at the selective quality too.
+    #[serde(default)]
+    pub preserve_buttons: bool,
 }
+
+fn default_selective_quality() -> u8 {
+    90
+}
+
+/// The largest JPEG smoothing setting.
+pub const MAX_SMOOTHING: u8 = 8;
 
 impl Default for ExportSettings {
     fn default() -> Self {
-        Self { format: ExportFormat::Png32, quality: 80, colors: 256, transparent: false, matte: None }
+        Self { format: ExportFormat::Png32, quality: 80, colors: 256, transparent: false, matte: None, smoothing: 0, selective: false, selective_quality: 90, preserve_text: false, preserve_buttons: false }
     }
+}
+
+/// The pictures of an animated GIF, each drawn whole as it shows, with the time it
+/// stays on show in milliseconds, and how many times the animation plays (0 for ever).
+/// `None` for anything that is not a GIF of more than one picture.
+pub fn gif_frames(bytes: &[u8]) -> Option<(Vec<(crate::bitmap::Bitmap, u32)>, u16)> {
+    use image::AnimationDecoder;
+    if !bytes.starts_with(b"GIF8") {
+        return None;
+    }
+    let decoder = image::codecs::gif::GifDecoder::new(std::io::Cursor::new(bytes)).ok()?;
+    let mut frames = Vec::new();
+    for frame in decoder.into_frames().take(2000) {
+        let frame = frame.ok()?;
+        let (numerator, denominator) = frame.delay().numer_denom_ms();
+        let delay = if denominator == 0 { 100 } else { numerator / denominator };
+        let picture = frame.into_buffer();
+        let (width, height) = (picture.width(), picture.height());
+        // A delay of nothing is shown by browsers as a tenth of a second.
+        frames.push((crate::bitmap::Bitmap::from_rgba(width, height, picture.into_raw())?, if delay == 0 { 100 } else { delay }));
+    }
+    if frames.len() < 2 {
+        return None;
+    }
+    let mut options = gif::DecodeOptions::new();
+    options.set_color_output(gif::ColorOutput::Indexed);
+    let loops = match options.read_info(bytes).map(|reader| reader.repeat()) {
+        Ok(gif::Repeat::Finite(more)) => more.saturating_add(1),
+        Ok(gif::Repeat::Infinite) => 0,
+        Err(_) => 0,
+    };
+    Some((frames, loops))
 }
 
 /// Straight-alpha RGBA pixels of a rendered page.
@@ -267,6 +339,28 @@ fn quantize(rgba: &[u8], colors: u16) -> Indexed {
     Indexed { palette, indices, transparent: has_transparency.then_some(0) }
 }
 
+/// Blurs RGB pixels a little, as much as the JPEG smoothing setting asks for.
+fn smoothed(rgb: Vec<u8>, width: u32, height: u32, smoothing: u8) -> Vec<u8> {
+    if smoothing == 0 {
+        return rgb;
+    }
+    // A blur of three pixels across, mixed with the picture: 8 is the full blur.
+    let amount = smoothing.min(MAX_SMOOTHING) as f32 / MAX_SMOOTHING as f32;
+    let (w, h) = (width as i64, height as i64);
+    let at = |x: i64, y: i64, c: usize| rgb[((y.clamp(0, h - 1) * w + x.clamp(0, w - 1)) * 3) as usize + c] as f32;
+    let mut out = vec![0u8; rgb.len()];
+    for y in 0..h {
+        for x in 0..w {
+            for c in 0..3 {
+                let around: f32 = (-1..=1).flat_map(|dy| (-1..=1).map(move |dx| (dx, dy))).map(|(dx, dy)| at(x + dx, y + dy, c)).sum::<f32>() / 9.0;
+                let here = at(x, y, c);
+                out[((y * w + x) * 3) as usize + c] = (here + (around - here) * amount).round() as u8;
+            }
+        }
+    }
+    out
+}
+
 fn prepared(pixmap: &Pixmap, settings: &ExportSettings) -> Vec<u8> {
     let mut rgba = straight_rgba(pixmap);
     if settings.format != ExportFormat::Png32 {
@@ -309,19 +403,23 @@ fn gif_frame(pixmap: &Pixmap, settings: &ExportSettings, delay_ms: u32) -> gif::
 }
 
 fn encode_gif(page: &Page, settings: &ExportSettings) -> Result<Vec<u8>> {
-    ensure!(page.width <= MAX_GIF_SIZE && page.height <= MAX_GIF_SIZE, "GIF images cannot be larger than {MAX_GIF_SIZE} pixels");
+    ensure!(page.width <= MAX_GIF_SIZE && page.height <= MAX_GIF_SIZE, tf("GIF images cannot be larger than {} pixels", &[&MAX_GIF_SIZE]));
     let animated = settings.format == ExportFormat::AnimatedGif;
     let states: Vec<usize> = if animated {
         (0..page.states.len()).filter(|i| page.states[*i].exported).collect()
     } else {
         vec![page.active_state]
     };
-    ensure!(!states.is_empty(), "Every state is switched off in the States panel");
+    ensure!(!states.is_empty(), t("Every state is switched off in the States panel"));
     let mut out = Vec::new();
     {
         let mut encoder = gif::Encoder::new(&mut out, page.width as u16, page.height as u16, &[])?;
-        if animated {
-            encoder.set_repeat(gif::Repeat::Infinite)?;
+        // Played once through, a GIF says nothing about repeating; otherwise it says how many more times.
+        if animated && page.gif_loops != 1 {
+            encoder.set_repeat(match page.gif_loops {
+                0 => gif::Repeat::Infinite,
+                times => gif::Repeat::Finite(times - 1),
+            })?;
         }
         for index in states {
             let pixmap = render_page(&page.at_state(index))?;
@@ -349,7 +447,25 @@ pub fn encode(page: &Page, settings: &ExportSettings) -> Result<Vec<u8>> {
             if settings.format == ExportFormat::Png24 {
                 PngEncoder::new(&mut out).write_image(&rgb, w, h, ExtendedColorType::Rgb8)?;
             } else {
-                JpegEncoder::new_with_quality(&mut out, settings.quality.clamp(1, 100)).write_image(&rgb, w, h, ExtendedColorType::Rgb8)?;
+                let rgb = smoothed(rgb, w, h, settings.smoothing);
+                let quality = settings.quality.clamp(1, 100);
+                // The areas kept at the selective quality: the JPEG mask, and text if it is to be preserved.
+                let mask = page.jpeg_mask.as_ref().filter(|mask| mask.size() == (w, h));
+                let kept = |o: &&crate::model::Object| match &o.shape {
+                    crate::model::Shape::Text { .. } => settings.preserve_text,
+                    crate::model::Shape::Instance { symbol, .. } => settings.preserve_buttons && page.button_symbols.contains(symbol),
+                    _ => false,
+                };
+                let text: Vec<crate::model::Rect> = page.objects().filter(|o| o.visible).filter(kept).map(|o| o.bounds).collect();
+                if settings.selective && (mask.is_some() || !text.is_empty()) {
+                    let covers = |x: u32, y: u32| {
+                        mask.is_some_and(|mask| mask.is_set(x, y)) || text.iter().any(|b| b.contains(crate::model::v2(x as f32 + 0.5, y as f32 + 0.5)))
+                    };
+                    let selective = crate::jpeg::Selective { covers: &covers, quality: settings.selective_quality.clamp(1, 100) };
+                    out = crate::jpeg::encode(&rgb, w, h, quality, Some(selective));
+                } else {
+                    JpegEncoder::new_with_quality(&mut out, quality).write_image(&rgb, w, h, ExtendedColorType::Rgb8)?;
+                }
             }
         }
         ExportFormat::Gif | ExportFormat::AnimatedGif => return Err(anyhow!("handled above")),
@@ -376,7 +492,7 @@ pub fn export_page(page: &Page, path: &Path) -> Result<()> {
     match settings_for_path(&page.export, path) {
         Some(settings) => {
             let bytes = encode(page, &settings)?;
-            std::fs::write(path, bytes).with_context(|| format!("could not write {}", path.display()))
+            std::fs::write(path, bytes).with_context(|| tf("could not write {}", &[&path.display()]))
         }
         None => export_image(page, path),
     }
@@ -394,6 +510,48 @@ pub fn format_size(bytes: usize) -> String {
 }
 
 #[cfg(test)]
+mod animation_tests {
+    use super::*;
+    use crate::model::{Document, Editor};
+
+    #[test]
+    fn an_animated_gif_comes_back_as_states_with_its_times_and_looping() {
+        // Three states, each a box further right, played four times.
+        let mut e = Editor::new((crate::examples::EXAMPLES[2].build)());
+        let page = e.doc.page_mut();
+        page.gif_loops = 4;
+        page.states[1].delay_ms = 250;
+        page.states.truncate(3);
+        page.animations.clear();
+        let page = e.export_page();
+        let bytes = encode(&page, &page.export).unwrap();
+        let (frames, loops) = gif_frames(&bytes).unwrap();
+        assert_eq!((frames.len(), loops), (3, 4));
+        assert_eq!(frames.iter().map(|(_, delay)| *delay).collect::<Vec<_>>(), [90, 250, 90]);
+        assert!(frames.iter().all(|(bitmap, _)| (bitmap.width(), bitmap.height()) == (480, 300)));
+        let doc = Document::from_frames("star", frames, loops).unwrap();
+        let opened = &doc.pages[0];
+        assert_eq!((opened.states.len(), opened.gif_loops, opened.width, opened.height), (3, 4, 480, 300));
+        assert_eq!(opened.states[1].delay_ms, 250);
+        assert!((0..3).all(|state| opened.at_state(state).objects().count() == 1));
+        // The states differ: the star has moved.
+        let first = crate::export::render_page(&opened.at_state(0)).unwrap();
+        let last = crate::export::render_page(&opened.at_state(2)).unwrap();
+        assert!(first.data() != last.data());
+        // It survives being saved as a document of ours.
+        let again = crate::model::document_from_json(&crate::model::document_to_json(&doc).unwrap()).unwrap();
+        assert_eq!((again.pages[0].gif_loops, again.pages[0].states.len()), (4, 3));
+        // Played once through, the file does not ask to be repeated; a still picture is no animation.
+        let mut once = page.clone();
+        once.gif_loops = 1;
+        assert_eq!(gif_frames(&encode(&once, &once.export).unwrap()).unwrap().1, 1);
+        let still = Editor::new(Document::new(8, 8)).export_page();
+        let still_gif = encode(&still, &ExportSettings { format: ExportFormat::Gif, ..ExportSettings::default() }).unwrap();
+        assert!(gif_frames(&still_gif).is_none() && gif_frames(b"not a gif").is_none());
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::model::{Object, Rect, Shape};
@@ -407,6 +565,20 @@ mod tests {
             shape: Shape::Rect { radius: 0.0 },
             bounds: Rect { x: 5.0, y: 5.0, w: 10.0, h: 10.0 },
             points: Vec::new(),
+            handles: Vec::new(),
+            placement: None,
+            pivot: None,
+
+            behaviors: Vec::new(),
+            attached: String::new(),
+            blend: crate::blend::BlendMode::Normal,
+            mask: None,
+            mask_of: None,
+            fill_style: None,
+            stroke_profile: Vec::new(),
+            fill_look: Default::default(),
+            link: String::new(),
+            filters: Vec::new(),
             fill: Some(Color::rgb(200, 10, 10)),
             stroke: None,
             opacity: 1.0,
@@ -458,6 +630,83 @@ mod tests {
             assert!(result.palette.len() / 3 <= colors as usize, "{colors}");
             assert!(result.indices.iter().all(|i| (*i as usize) < result.palette.len() / 3));
         }
+    }
+
+    /// A page filled with a noisy bitmap, which JPEG finds expensive.
+    fn noisy_page() -> Page {
+        let mut source = Page::new("p", 64, 64);
+        let bitmap = crate::bitmap::Bitmap::from_rgba(64, 64, (0..64 * 64).flat_map(|i: u32| [(i * 37 % 256) as u8, (i * 91 % 256) as u8, (i * 13 % 256) as u8, 255]).collect()).unwrap();
+        source.layers[0].objects.push(Object::new_bitmap(1, "b", bitmap, 0.0, 0.0));
+        source
+    }
+
+    #[test]
+    fn smoothing_makes_a_jpeg_smaller() {
+        let source = noisy_page();
+        let size = |smoothing: u8| encode(&source, &ExportSettings { smoothing, ..settings(ExportFormat::Jpeg) }).unwrap().len();
+        assert!(size(8) < size(4) && size(4) < size(0), "{} {} {}", size(8), size(4), size(0));
+        // Out-of-range values are treated as the strongest setting.
+        assert_eq!(size(200), size(8));
+    }
+
+    #[test]
+    fn the_jpeg_mask_is_written_at_the_selective_quality() {
+        let mut source = noisy_page();
+        let plain = ExportSettings { quality: 20, ..settings(ExportFormat::Jpeg) };
+        let selective = ExportSettings { selective: true, selective_quality: 95, ..plain };
+        let rough = encode(&source, &plain).unwrap().len();
+        // Without a mask there is nothing to keep, and the file is the plain one.
+        assert_eq!(encode(&source, &selective).unwrap().len(), rough);
+
+        source.jpeg_mask = Some(std::sync::Arc::new(crate::bitmap::Mask::from_fn(64, 64, |x, _| x < 32)));
+        let mixed = encode(&source, &selective).unwrap();
+        let fine = encode(&source, &ExportSettings { quality: 95, ..plain }).unwrap().len();
+        assert!(mixed.len() > rough * 2 && mixed.len() < fine, "{rough} {} {fine}", mixed.len());
+        assert!(image::load_from_memory(&mixed).is_ok());
+        // Switched off, the mask is ignored.
+        assert_eq!(encode(&source, &plain).unwrap().len(), rough);
+        // A mask left over from another page size is ignored too.
+        source.jpeg_mask = Some(std::sync::Arc::new(crate::bitmap::Mask::from_fn(10, 10, |_, _| true)));
+        assert_eq!(encode(&source, &selective).unwrap().len(), rough);
+    }
+
+    #[test]
+    fn text_can_be_kept_at_the_selective_quality() {
+        let mut source = noisy_page();
+        let mut text = Object::new_bitmap(2, "t", crate::bitmap::Bitmap::from_rgba(1, 1, vec![0, 0, 0, 0]).unwrap(), 8.0, 8.0);
+        text.shape = crate::model::Shape::Text { content: "a".into(), size: 20.0, style: Default::default() };
+        text.bounds = crate::model::Rect { x: 8.0, y: 8.0, w: 32.0, h: 24.0 };
+        source.layers[0].objects.push(text);
+        let plain = ExportSettings { quality: 20, selective: true, selective_quality: 95, ..settings(ExportFormat::Jpeg) };
+        let without = encode(&source, &plain).unwrap().len();
+        let with = encode(&source, &ExportSettings { preserve_text: true, ..plain }).unwrap().len();
+        assert!(with > without, "{with} against {without}");
+    }
+
+    #[test]
+    fn button_symbols_can_be_kept_at_the_selective_quality() {
+        let mut ed = crate::model::Editor::new(crate::model::Document::new(64, 64));
+        let noise = noisy_page().layers[0].objects[0].clone();
+        ed.add_object(noise);
+        // A symbol placed over part of the page, first as a graphic and then as a button.
+        let mut part = Object::new_bitmap(5, "s", crate::bitmap::Bitmap::from_rgba(1, 1, vec![0, 0, 0, 0]).unwrap(), 0.0, 0.0);
+        part.bounds = crate::model::Rect { x: 0.0, y: 0.0, w: 32.0, h: 32.0 };
+        let symbol = ed.add_library_symbol("b", &[part], crate::model::SymbolKind::Graphic);
+        assert!(ed.place_symbol(symbol));
+        let options = ExportSettings { quality: 20, selective: true, selective_quality: 95, preserve_buttons: true, ..settings(ExportFormat::Jpeg) };
+        let as_graphic = encode(&ed.export_page(), &options).unwrap().len();
+        ed.doc.symbols[0].kind = crate::model::SymbolKind::Button;
+        let as_button = encode(&ed.export_page(), &options).unwrap().len();
+        assert!(as_button > as_graphic, "{as_button} against {as_graphic}");
+        // The option switched off leaves the button at the plain quality.
+        assert_eq!(encode(&ed.export_page(), &ExportSettings { preserve_buttons: false, ..options }).unwrap().len(), as_graphic);
+    }
+
+    #[test]
+    fn settings_saved_before_these_options_existed_still_load() {
+        let old = r#"{"format":"Jpeg","quality":70,"colors":256,"transparent":false,"matte":null}"#;
+        let loaded: ExportSettings = serde_json::from_str(old).unwrap();
+        assert_eq!((loaded.smoothing, loaded.selective, loaded.selective_quality, loaded.preserve_text), (0, false, 90, false));
     }
 
     #[test]

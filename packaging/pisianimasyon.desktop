@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PisiAnimasyon
+GenericName=Animation Editor
+GenericName[tr]=Animasyon Düzenleyicisi
+Comment=Timeline animation with keyframes and tweens, published as HTML5
+Comment[tr]=Anahtar kareler ve ara doldurmalarla zaman çizelgesi animasyonu; HTML5 olarak yayımlanır
+Exec=pisianimasyon %f
+Icon=pisianimasyon
+Terminal=false
+Categories=Graphics;2DGraphics;VectorGraphics;
+MimeType=application/x-pisianimasyon;application/x-pisiworks;
+Keywords=animation;timeline;tween;keyframe;
+Keywords[tr]=animasyon;canlandırma;zaman çizelgesi;anahtar kare;
+StartupWMClass=PisiAnimasyon
+StartupNotify=true

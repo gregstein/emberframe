@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PisiWorks
+GenericName=Screen Design Editor
+GenericName[tr]=Ekran Tasarımı Düzenleyicisi
+Comment=Vector and bitmap screen design in a Fireworks-like workspace
+Comment[tr]=Fireworks benzeri çalışma alanında vektör ve bitmap ekran tasarımı
+Exec=pisiworks %f
+Icon=pisiworks
+Terminal=false
+Categories=Graphics;2DGraphics;VectorGraphics;RasterGraphics;
+MimeType=application/x-pisiworks;image/png;image/jpeg;image/gif;image/bmp;
+Keywords=fireworks;design;vector;bitmap;web;
+Keywords[tr]=fireworks;tasarım;vektör;bitmap;web;çizim;
+StartupWMClass=PisiWorks
+StartupNotify=true

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PisiAnimasyon ve PisiWorks – okullar için animasyon, oyun ve çizim programları</title>
+<meta name="description" content="PisiAnimasyon ve PisiWorks: Pardus için, Türkçe, ücretsiz ve özgür iki program, tek pakette. PisiAnimasyon ile animasyon ve oyun yapılır; PisiWorks ile çizim ve web tasarımı.">
+<style>
+  :root { --ink: #1c2438; --dim: #5a6478; --line: #d5dbe6; --blue: #1e78d2; --orange: #e85a14; --green: #2c8a3c; --back: #eef1f6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--ink); background: #fff; font: 18px/1.65 "Noto Sans", "Liberation Sans", "DejaVu Sans", Arial, sans-serif; }
+  a { color: var(--blue); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  header { background: linear-gradient(160deg, #1c2438, #24406e); color: #fff; padding: 56px 0 48px; }
+  header h1 { font-size: 52px; line-height: 1.1; margin: 0 0 12px; }
+  header p { font-size: 22px; margin: 0 0 28px; max-width: 720px; color: #dfe6f2; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+  .button { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; }
+  .button.main { background: var(--orange); color: #fff; }
+  .button.other { background: rgba(255, 255, 255, .14); color: #fff; border: 1px solid rgba(255, 255, 255, .4); }
+  section { padding: 44px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 30px; margin: 0 0 8px; }
+  .lead { color: var(--dim); font-size: 20px; margin: 0 0 24px; max-width: 760px; }
+  .play, .pair { background: var(--back); }
+  .film { display: block; width: 100%; max-width: 720px; aspect-ratio: 720 / 360; border: 2px solid var(--blue); border-radius: 10px; background: #222; margin: 0 auto; }
+  .hint { text-align: center; color: var(--blue); font-weight: 700; margin: 10px 0 0; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 20px; }
+  .card p { margin: 0; color: var(--dim); font-size: 17px; }
+  pre { background: #1c2438; color: #f4f6fa; padding: 16px 20px; border-radius: 10px; overflow-x: auto; font: 16px/1.55 "DejaVu Sans Mono", "Liberation Mono", monospace; }
+  figure { margin: 20px 0 0; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 10px rgba(28, 36, 56, .14); }
+  figcaption { color: var(--dim); font-size: 15px; margin-top: 6px; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; align-items: start; }
+  .note { background: #fff6c8; border: 1px solid #e6d27a; border-radius: 10px; padding: 12px 16px; font-size: 16px; }
+  footer { padding: 32px 0 56px; color: var(--dim); font-size: 15px; }
+  @media (max-width: 640px) { header h1 { font-size: 38px; } header p { font-size: 19px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>PisiAnimasyon</h1>
+    <p>Okullar için animasyon ve oyun yapma programı. Çizim programı <b>PisiWorks</b> ile birlikte, tek pakette gelir. İkisi de Pardus'ta çalışır, Türkçedir, ücretsizdir ve özgür yazılımdır.</p>
+    <div class="buttons">
+      <a class="button main" href="kitap/index-canli.html">Kitabı oku</a>
+      <a class="button other" href="#kur">İki programı kur</a>
+      <a class="button other" href="#pisiworks">PisiWorks</a>
+      <a class="button other" href="https://github.com/MuratSAPMAZ/PisiWorks">Kaynak kodu</a>
+    </div>
+  </div>
+</header>
+
+<section class="play">
+  <div class="wrap">
+    <h2>Önce bir dene</h2>
+    <p class="lead">Aşağıdaki bir resim değil: PisiAnimasyon ile yapılmış, tarayıcıda çalışan bir film. Üstüne tıkla, sonra sağ ya da sol oka basılı tut.</p>
+    <iframe class="film" src="kitap/film/20-araba.html" title="Araba sürmek: PisiAnimasyon ile yapılmış bir film" loading="lazy"></iframe>
+    <p class="hint">▶ Tıkla ve oyna. Bu arabanın nasıl yapıldığı kitabın 20. bölümünde.</p>
+  </div>
+</section>
+
+<section class="pair">
+  <div class="wrap">
+    <h2>Tek paket, iki program</h2>
+    <p class="lead">Paketi kurunca uygulama menüsüne iki program gelir. Aynı çizim araçlarını paylaşırlar; biri hareketi, öbürü durağan tasarımı konu alır.</p>
+    <div class="cards">
+      <div class="card"><h3>PisiAnimasyon</h3><p>Animasyon ve oyun. Flash dersinin Pardus'taki karşılığı: zaman çizelgesi, ara doldurma, semboller; üstüne davranışlar ve Türkçe kurallar. <a href="#animasyon">Ayrıntısı ↓</a></p></div>
+      <div class="card"><h3>PisiWorks</h3><p>Çizim ve web tasarımı. Fireworks dersinin Pardus'taki karşılığı: vektör ve bitmap araçları, filtreler, dilimler, dışa aktarma. <a href="#pisiworks">Ayrıntısı ↓</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="animasyon">
+  <div class="wrap">
+    <h2>PisiAnimasyon ne yapar?</h2>
+    <p class="lead">Adobe Flash'ın derslerde öğretilen çalışma biçimini örnek alır; üstüne, hiç kod yazmadan oyun yapmayı sağlayan kendi araçlarını ekler.</p>
+    <div class="cards">
+      <div class="card"><h3>Zaman çizelgesi</h3><p>Kare, anahtar kare, hareket ve şekil ara doldurma, yavaşlama, kılavuz yolu, maske, soğan zarı. Flash dersindeki adlarla.</p></div>
+      <div class="card"><h3>Davranışlar</h3><p>Bir şekle tek tıkla verilen on dokuz hazır hareket: dön, zıpla, ok tuşlarıyla yürü, düş ve zıpla, katı, kamera.</p></div>
+      <div class="card"><h3>Kurallar</h3><p>"Elma sepete değince: puanı 1 artır." Oyunun kuralları listelerden seçilir ve cümle olarak okunur.</p></div>
+      <div class="card"><h3>Türkçe yazı dili</h3><p>Aynı kurallar klavyeden, Türkçe cümlelerle de yazılır: sayılar, işlemler, eğer, yinele, kendi komutların.</p></div>
+      <div class="card"><h3>Semboller</h3><p>Grafik, film klibi ve düğme sembolleri; kitaplık; bir kalıptan çok kopya.</p></div>
+      <div class="card"><h3>Tek dosyalık film</h3><p>Yaptığın film tek bir HTML dosyası olur: internet gerekmez, her tarayıcıda açılır, e-postayla gönderilir.</p></div>
+    </div>
+    <figure>
+      <img src="kitap/img/01-pencere.png" alt="PisiAnimasyon penceresi: solda araçlar, üstte zaman çizelgesi, ortada sahne, altta özellikler" loading="lazy">
+      <figcaption>PisiAnimasyon penceresi. Numaralar kitabın ilk bölümünden.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <h2>Kod yazmadan, ya da Türkçe yazarak</h2>
+      <p>Kurallar listelerden seçilerek kurulur. İsteyen aynı kuralları Türkçe cümlelerle yazar; pencere yazdıkça önerir, yanlışı kırmızıyla, eksiği sarıyla gösterir ve çoğu zaman tek tıkla düzeltir.</p>
+<pre>Sayılar:
+    Puan = 0
+
+Elma nesnesi Sepet nesnesine değince:
+    Puan sayısını 1 artır
+    Elma nesnesini üstte rastgele bir yere koy
+    çın sesini çal</pre>
+    </div>
+    <figure>
+      <img src="kitap/img/21-uyari.png" alt="Kuralları Yaz penceresi; sarı bir uyarı ve yanında düzelten bir düğme" loading="lazy">
+      <figcaption>Cümle doğru ama kutu henüz zıplayamaz: pencere söyler ve düzeltir.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Kitap</h2>
+    <p class="lead">Öğrenci ve öğretmen için, ders ders ilerleyen resimli bir kitap. 31 bölüm; her bölümde adım adım ekran görüntüleri, "Takıldıysan" kutuları, alıştırmalar ve bir öğretmen notu.</p>
+    <div class="cards">
+      <div class="card"><h3><a href="kitap/index-canli.html">Canlı örnekli sürüm</a></h3><p>Örnekler sayfanın içinde gerçekten oynar. Yirmi film.</p></div>
+      <div class="card"><h3><a href="kitap/index.html">Resimli sürüm</a></h3><p>Aynı kitap, örnekler resim olarak. Yazdırmaya uygun.</p></div>
+      <div class="card"><h3><a href="kitap/31-ogretmen-icin-canli.html">Öğretmen için</a></h3><p>On altı haftalık plan, kazanım tablosu, değerlendirme ölçütleri.</p></div>
+    </div>
+    <p style="margin-top: 20px">Nereden başlamalı: <a href="kitap/01-ilk-oyun-canli.html">1. bölüm, ilk oyunun</a>. On dakikada yürüyen ve zıplayan bir kutu.</p>
+  </div>
+</section>
+
+<section id="pisiworks">
+  <div class="wrap">
+    <h2>PisiWorks ne yapar?</h2>
+    <p class="lead">Adobe Fireworks'ün derslerde öğretilen çalışma biçimini örnek alan bir çizim ve web tasarımı programı. Menüleri, panelleri ve kısayolları ders notlarındaki adımlarla aynı yerdedir.</p>
+    <div class="cards">
+      <div class="card"><h3>Vektör ve bitmap</h3><p>Kalem, şekiller, otomatik şekiller, yol işlemleri; fırça, silgi, sihirli değnek, seçim araçları. İkisi aynı belgede.</p></div>
+      <div class="card"><h3>Canlı filtreler ve dolgular</h3><p>Gölge, parlama, kabartma, bulanıklık; degrade ve desen dolguları; maskeler ve karışım modları.</p></div>
+      <div class="card"><h3>Web için tasarım</h3><p>Dilimler, etkin noktalar, fareye tepki veren düğmeler; sayfalar, durumlar, katmanlar.</p></div>
+      <div class="card"><h3>Dışa aktarma</h3><p>PNG, JPEG ve GIF; en iyileştirme paneli, 2 ve 4 yukarı önizleme, animasyonlu GIF, HTML ile dilimli dışa aktarma.</p></div>
+      <div class="card"><h3>Fireworks dosyaları</h3><p>Fireworks PNG dosyalarının katmanlarını okur; eski ders dosyaları açılır.</p></div>
+      <div class="card"><h3>İkisi birlikte</h3><p>PisiWorks'te çizdiğini PisiAnimasyon'da açar, animasyonun bir karesini PisiWorks'te düzeltirsin.</p></div>
+    </div>
+    <figure>
+      <img src="img/pisiworks.png" alt="PisiWorks penceresi: bir web sayfası tasarımı, sağda en iyileştirme, katmanlar ve stiller panelleri" loading="lazy">
+      <figcaption>PisiWorks penceresi. Programın kendi kılavuzu <b>F1</b> ile açılır.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="kur">
+  <div class="wrap">
+    <h2>Nasıl kurulur</h2>
+    <p class="lead">Tek paket iki programı birden kurar: <b>PisiAnimasyon</b> ve <b>PisiWorks</b>.</p>
+    <p><a class="button main" href="https://github.com/MuratSAPMAZ/PisiWorks/releases/download/pisiworks-0.2.0/pisiworks_0.2.0_amd64.deb">Paketi indir: PisiAnimasyon + PisiWorks (0.2.0, amd64)</a></p>
+    <p>İndirdiğin klasörde bir uçbirim aç ve şunu yaz:</p>
+<pre>sudo apt install ./pisiworks_0.2.0_amd64.deb</pre>
+    <p>Pardus 25'te denenmiştir. Sürüm notları ve önceki sürümler: <a href="https://github.com/MuratSAPMAZ/PisiWorks/releases">github.com/MuratSAPMAZ/PisiWorks/releases</a>. Kaynağından derlemek isteyenler için yol aynı depoda yazılıdır.</p>
+    <p>Kurulumdan sonra uygulama menüsünün Grafik bölümünde <b>PisiAnimasyon</b> ve <b>PisiWorks</b> görünür. PisiAnimasyon'da <b>F1</b> bu kitabı, PisiWorks'te kendi kılavuzunu açar.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <h2>Kimin için, neden</h2>
+      <p>Okulların müfredatında Flash ve Fireworks hâlâ anlatılıyor; ama ikisi de Pardus'ta çalışmıyor ve artık geliştirilmiyor. PisiAnimasyon ve PisiWorks, o derslerin Pardus'ta sürebilmesi için yazıldı.</p>
+      <p>Ticari bir amacı yoktur: satılmaz, reklam göstermez, veri toplamaz.</p>
+    </div>
+    <div>
+      <h2>Lisans</h2>
+      <p>İki program da özgür yazılımdır: GNU Genel Kamu Lisansı, sürüm 3 ya da sonrası. Herkes kullanabilir, inceleyebilir, değiştirebilir ve dağıtabilir.</p>
+      <p><b>Yaptığın filmler ve çizimler senindir</b>; programların lisansı onları bağlamaz.</p>
+      <p>Değiştirilmiş bir sürüm kendi adını taşımalıdır. Ayrıntısı: <a href="NOTICE">NOTICE</a> ve <a href="COPYING">COPYING</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Geliştiren: Murat SAPMAZ · <a href="https://muratsapmaz.web.app/">muratsapmaz.web.app</a> · Kaynak: <a href="https://github.com/MuratSAPMAZ/PisiWorks">github.com/MuratSAPMAZ/PisiWorks</a></p>
+    <p>PisiWorks, Med Amine Belbachir'in <a href="https://github.com/gregstein/emberframe">Emberframe</a>'i üzerine kuruludur.</p>
+    <p>Adobe, Flash, Fireworks ve Animate, Adobe Inc.'in ticari markalarıdır. PisiAnimasyon ve PisiWorks'ün Adobe ile hiçbir bağı yoktur; Adobe'ye ait kod, görsel ya da belge içermezler. Pardus ve TÜBİTAK ile kurumsal bir bağı yoktur; bağımsız bir projedir.</p>
+  </div>
+</footer>
+
+</body>
+</html>

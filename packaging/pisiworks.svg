@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="PisiWorks">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1fa3a3"/>
+      <stop offset="1" stop-color="#17527a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="120" fill="url(#back)"/>
+  <!-- A cat's head: "pisi" is what a cat is called in Turkish. -->
+  <polygon points="62,128 70,52 122,96" fill="#ffffff"/>
+  <polygon points="194,128 186,52 134,96" fill="#ffffff"/>
+  <ellipse cx="128" cy="142" rx="72" ry="60" fill="#ffffff"/>
+  <ellipse cx="102" cy="136" rx="9" ry="13" fill="#17527a"/>
+  <ellipse cx="154" cy="136" rx="9" ry="13" fill="#17527a"/>
+  <polygon points="120,160 136,160 128,170" fill="#f08a24"/>
+  <!-- A spark, for the works. -->
+  <polygon points="206,34 213,57 236,64 213,71 206,94 199,71 176,64 199,57" fill="#ffd34d"/>
+</svg>

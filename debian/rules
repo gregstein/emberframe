@@ -1,0 +1,47 @@
+#!/usr/bin/make -f
+# Builds PisiWorks and PisiAnimasyon with cargo, and installs their files with packaging/install-files.sh, the same
+# script packaging/build-deb.sh uses.
+#
+# A Debian build has no network. The libraries the programs are made of (crates) are therefore taken from the folder
+# cargo-vendor/ when it is there: packaging/vendor-tarball.sh makes it, as a tarball to unpack in the source tree.
+# Without that folder cargo fetches them from crates.io, which needs a network.
+
+# Every cargo that runs here, the one in packaging/third-party.py too, reads debian/cargo-home/config.toml.
+export CARGO_HOME = $(CURDIR)/debian/cargo-home
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	mkdir -p $(CARGO_HOME)
+ifneq ($(wildcard cargo-vendor),)
+	printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "$(CURDIR)/cargo-vendor"\n\n[net]\noffline = true\n' > $(CARGO_HOME)/config.toml
+endif
+	cargo build --release --locked
+
+override_dh_auto_test:
+
+override_dh_auto_install:
+	packaging/install-files.sh debian/pisiworks
+
+override_dh_auto_clean:
+	rm -rf target debian/cargo-home
+
+# The notices of the libraries are told from their own sources, which dwz and strip need not look at.
+override_dh_dwz:
+
+# dh_clean would remove the *.orig files the vendored libraries have, and cargo checks that every file is there.
+override_dh_clean:
+	dh_clean -X.orig -X.rej
+
+# These would rewrite files inside the vendored libraries (config.guess and the like), and cargo checks every file
+# against the checksum it was vendored with. Nothing of ours uses the autotools.
+override_dh_update_autotools_config:
+
+override_dh_autoreconf:
+
+# The guides and notices are read as they are: they are not compressed.
+override_dh_compress:
+	dh_compress -X.md -XNOTICE

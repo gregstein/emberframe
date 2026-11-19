@@ -1,10 +1,60 @@
+// This file is part of PisiWorks.
+// Copyright (C) 2026 Murat SAPMAZ
+// Portions copyright (c) 2026 Med Amine Belbachir, from Emberframe, under the MIT license:
+// see LICENSES/MIT.txt and NOTICE.
+//
+// PisiWorks is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// PisiWorks is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+// even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with PisiWorks. If
+// not, see <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //! Workspace colors and metrics.
 //!
 //! The grays and list colors were sampled from a screenshot of the reference workspace.
 
-pub const APP_NAME: &str = "Emberframe";
-pub const APP_MARK: &str = "Ef";
-pub const FILE_EXTENSION: &str = "ember";
+pub const APP_NAME: &str = "PisiWorks";
+pub const APP_MARK: &str = "Pw";
+pub const FILE_EXTENSION: &str = "pisi";
+/// The extension of the animation program's documents. Either program opens the other's.
+pub const SAHNE_EXTENSION: &str = "sahne";
+
+/// Whether this is PisiAnimasyon, the animation program, and not PisiWorks. Set once, as the program starts.
+static SAHNE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// Makes the program PisiAnimasyon: the same workspace with a timeline under the stage.
+pub fn set_sahne() {
+    SAHNE.store(true, std::sync::atomic::Ordering::Relaxed);
+}
+
+pub fn is_sahne() -> bool {
+    SAHNE.load(std::sync::atomic::Ordering::Relaxed)
+}
+
+/// The name of the program that is running.
+pub fn app_name() -> &'static str {
+    if is_sahne() { "PisiAnimasyon" } else { APP_NAME }
+}
+
+/// The two letters at the start of the menu bar.
+pub fn app_mark() -> &'static str {
+    // Not "Ps": those two letters are the mark of another company's program.
+    if is_sahne() { "Pa" } else { APP_MARK }
+}
+
+/// The extension new documents are saved with.
+pub fn document_extension() -> &'static str {
+    if is_sahne() { SAHNE_EXTENSION } else { FILE_EXTENSION }
+}
+/// The extension documents had before, and Emberframe documents still have. They open and save as before.
+pub const LEGACY_EXTENSION: &str = "ember";
 
 pub const PANEL: u32 = 0xd6d6d6;
 /// The strip behind panel and document tabs.
@@ -35,7 +85,6 @@ pub const LIST_SPECIAL: u32 = 0xd4d0c8;
 pub const SELECTION: u32 = 0x00a8ff;
 pub const RULER: u32 = 0xdfdfdf;
 
-pub const FONT: &str = "Segoe UI";
 pub const FONT_SIZE: f32 = 11.0;
 
 pub const MENU_BAR_HEIGHT: f32 = 32.0;

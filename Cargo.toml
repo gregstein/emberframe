@@ -1,14 +1,15 @@
 [package]
-name = "emberframe"
-version = "0.1.0"
+name = "pisiworks"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.91"
-description = "A screen-design editor with a classic docked-panel workspace, built on GPUI."
-license = "MIT"
-authors = ["Med Amine Belbachir <https://medamineweb.com>"]
-repository = "https://github.com/gregstein/emberframe"
-homepage = "https://medamineweb.com/en/emberframe/"
+description = "A Fireworks-like screen-design editor for Pardus, with a Turkish interface, built on Emberframe and GPUI."
+license = "GPL-3.0-or-later"
+authors = ["Murat SAPMAZ <https://github.com/MuratSAPMAZ>", "Med Amine Belbachir <https://medamineweb.com>"]
+repository = "https://github.com/MuratSAPMAZ/PisiWorks"
+homepage = "https://github.com/MuratSAPMAZ/PisiWorks"
 readme = "README.md"
+default-run = "pisiworks"
 
 [dependencies]
 gpui = "0.2.2"
@@ -18,10 +19,14 @@ image = "0.25"
 base64 = "0.22"
 tiny-skia = "0.11"
 ab_glyph = "0.2"
+fontdb = "0.23"
+sys-locale = "0.3"
+dirs = "5"
 anyhow = "1"
 i_overlay = "9.1.0"
 png = "0.18"
 gif = "0.14"
+flate2 = "1"
 
 [profile.dev]
 opt-level = 1
@@ -34,3 +39,8 @@ debug = false
 [profile.release]
 lto = "thin"
 strip = true
+
+# See vendor/xim-ctext/Cargo.toml: typing Turkish letters through an X input method
+# crashes with the version GPUI asks for.
+[patch.crates-io]
+xim-ctext = { path = "vendor/xim-ctext" }

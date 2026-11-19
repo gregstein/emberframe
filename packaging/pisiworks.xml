@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-pisiworks">
+    <comment>PisiWorks document</comment>
+    <comment xml:lang="tr">PisiWorks belgesi</comment>
+    <sub-class-of type="application/json"/>
+    <icon name="pisiworks"/>
+    <glob pattern="*.pisi"/>
+    <glob pattern="*.ember"/>
+  </mime-type>
+  <mime-type type="application/x-pisianimasyon">
+    <comment>PisiAnimasyon animation</comment>
+    <comment xml:lang="tr">PisiAnimasyon animasyonu</comment>
+    <sub-class-of type="application/json"/>
+    <icon name="pisianimasyon"/>
+    <glob pattern="*.sahne"/>
+  </mime-type>
+</mime-info>
